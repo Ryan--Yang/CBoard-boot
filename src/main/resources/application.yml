@@ -7,7 +7,7 @@ server:
   port: 8080
   connection-timeout: 5000ms
   servlet:
-    context-path: /renren-fast
+    context-path: /cetc
 
 
 spring:

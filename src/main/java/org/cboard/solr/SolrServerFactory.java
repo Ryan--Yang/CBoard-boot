@@ -12,18 +12,22 @@ import org.apache.solr.client.solrj.impl.LBHttpSolrClient;
 public class SolrServerFactory implements PooledObjectFactory<SolrClient> {
 
     private String[] servers;
+    LBHttpSolrClient.Builder builder = new LBHttpSolrClient.Builder();
 
     public SolrServerFactory(String solrServices, String collectionName) {
         String[] tempServers = solrServices.split(",");
         servers = new String[tempServers.length];
         for (int i = 0; i < tempServers.length; i++) {
             servers[i] = "http://" + tempServers[i] + "/solr/" + collectionName;
+            builder.withBaseSolrUrl(servers[i]);
         }
     }
 
     @Override
     public PooledObject<SolrClient> makeObject() throws Exception {
-        SolrClient solrClient = new LBHttpSolrClient(servers);
+
+
+        SolrClient solrClient = builder.build();
         return new DefaultPooledObject(solrClient);
     }
     @Override

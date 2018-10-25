@@ -16,6 +16,16 @@ public class LoginController {
         return "login";
     }
 
+    @RequestMapping(value = "/starter", method = RequestMethod.GET)
+    public String starter() {
+        return "starter";
+    }
+
+    @RequestMapping(value = "/render", method = RequestMethod.GET)
+    public String rendhtml() {
+        return "render";
+    }
+
     private String getPrincipal(){
       return "";
     }
