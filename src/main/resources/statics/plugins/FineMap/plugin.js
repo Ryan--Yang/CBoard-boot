@@ -251,14 +251,14 @@ var threeLevelMap = {
             .attr('width', 30)
             .attr('height', 30)
             .attr('class', 'backTop')
-            .attr('xlink:href', 'imgs/back-top.svg')
+            .attr('xlink:href', 'statics/imgs/back-top.svg')
             .style('cursor', 'pointer')
             .on('click', function(){
                 that.map(that.provinceData);
             });
     },
     map: function(options) {
-        var mapPath = 'plugins/FineMap/mapdata/china.json';
+        var mapPath = 'statics/plugins/FineMap/mapdata/china.json';
         var that = this ? this : threeLevelMap;
         that.provinceData = options;
         var width = $('.map_wrapper')[0].clientWidth * 0.95;
@@ -324,7 +324,7 @@ var threeLevelMap = {
                         d3.selectAll(".pathProvince").remove();
                         d3.selectAll(".pathCounty").remove();
                         that.mapData.city = that.mapData.city || threeLevelMap.drillData[0].data;
-                        var pathProvince = "plugins/FineMap/mapdata/geometryProvince/" + id + ".json";
+                        var pathProvince = "statics/plugins/FineMap/mapdata/geometryProvince/" + id + ".json";
                         var argsProvince = {
                             d: d,
                             data: that.mapData.city,
@@ -436,7 +436,7 @@ var threeLevelMap = {
         var backColor;
         var that = this;
         var id = argsCountry.d.properties.id;
-        var mapPath = "plugins/FineMap/mapdata/geometryCouties/" + id + "00.json";
+        var mapPath = "statics/plugins/FineMap/mapdata/geometryCouties/" + id + "00.json";
         d3.json(mapPath, function(error, root) {
             if (error)
                 return console.error(error);

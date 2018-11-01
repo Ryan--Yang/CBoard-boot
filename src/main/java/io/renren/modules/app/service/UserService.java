@@ -1,7 +1,7 @@
 package io.renren.modules.app.service;
 
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.modules.app.entity.UserEntity;
 import io.renren.modules.app.form.LoginForm;
 

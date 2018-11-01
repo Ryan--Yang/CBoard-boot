@@ -611,7 +611,7 @@ cBoard.controller('cockpitLayoutCtrl', function ($stateParams, $state, chartServ
                 map[response[i].categoryName].push({
                     name: response[i].name,
                     id: response[i].id,
-                    iconUrl: "content:url(imgs/" + response[i].data.config.chart_type + "-active.png)"
+                    iconUrl: "content:url(statics/imgs/" + response[i].data.config.chart_type + "-active.png)"
                 })
             }
             vm._data.widgetList = map;

@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,8 +29,8 @@ import java.util.stream.Stream;
  */
 public abstract class DataProvider {
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    // @Autowired
+    // private AuthenticationService authenticationService;
     @Autowired
     private RoleService roleService;
     private InnerAggregator innerAggregator;
@@ -57,6 +56,7 @@ public abstract class DataProvider {
             return false;
         }
     }
+
     /**
      * get the aggregated data by user's widget designer
      *
@@ -96,11 +96,9 @@ public abstract class DataProvider {
             checkAndLoad(reload);
             dimVals = innerAggregator.queryDimVals(columnName, config);
         }
-        return Arrays.stream(dimVals)
-                .map(member -> {
-                    return Objects.isNull(member) ? NULL_STRING : member;
-                })
-                .sorted(new NaturalOrderComparator()).limit(1000).toArray(String[]::new);
+        return Arrays.stream(dimVals).map(member -> {
+            return Objects.isNull(member) ? NULL_STRING : member;
+        }).sorted(new NaturalOrderComparator()).limit(1000).toArray(String[]::new);
     }
 
     public final String[] invokeGetColumn(boolean reload) throws Exception {
@@ -153,9 +151,9 @@ public abstract class DataProvider {
         if (value == null || !(value.startsWith("{") && value.endsWith("}"))) {
             list.add(value);
         } else if ("{loginName}".equals(value)) {
-            //list.add(authenticationService.getCurrentUser().getUsername());
+            // list.add(authenticationService.getCurrentUser().getUsername());
         } else if ("{userName}".equals(value)) {
-            list.add(authenticationService.getCurrentUser().getName());
+            // list.add(authenticationService.getCurrentUser().getName());
         } else if ("{userRoles}".equals(value)) {
             List<DashboardRole> roles = roleService.getCurrentRoleList();
             roles.forEach(role -> list.add(role.getRoleName()));
@@ -238,11 +236,12 @@ public abstract class DataProvider {
     public static ConfigComponent separateNull(ConfigComponent configComponent) {
         if (configComponent instanceof DimensionConfig) {
             DimensionConfig cc = (DimensionConfig) configComponent;
-            if (("=".equals(cc.getFilterType()) || "≠".equals(cc.getFilterType())) && cc.getValues().size() > 1 &&
-                    cc.getValues().stream().anyMatch(s -> DataProvider.NULL_STRING.equals(s))) {
+            if (("=".equals(cc.getFilterType()) || "≠".equals(cc.getFilterType())) && cc.getValues().size() > 1
+                    && cc.getValues().stream().anyMatch(s -> DataProvider.NULL_STRING.equals(s))) {
                 CompositeConfig compositeConfig = new CompositeConfig();
                 compositeConfig.setType("=".equals(cc.getFilterType()) ? "OR" : "AND");
-                cc.setValues(cc.getValues().stream().filter(s -> !DataProvider.NULL_STRING.equals(s)).collect(Collectors.toList()));
+                cc.setValues(cc.getValues().stream().filter(s -> !DataProvider.NULL_STRING.equals(s))
+                        .collect(Collectors.toList()));
                 compositeConfig.getConfigComponents().add(cc);
                 DimensionConfig nullCc = new DimensionConfig();
                 nullCc.setColumnName(cc.getColumnName());

@@ -16,9 +16,9 @@
 
 package io.renren.modules.job.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
 import io.renren.modules.job.dao.ScheduleJobLogDao;
@@ -36,10 +36,12 @@ public class ScheduleJobLogServiceImpl extends ServiceImpl<ScheduleJobLogDao, Sc
 	public PageUtils queryPage(Map<String, Object> params) {
 		String jobId = (String)params.get("jobId");
 
-		Page<ScheduleJobLogEntity> page = this.selectPage(
+		/*Page<ScheduleJobLogEntity> page = this.selectPage(
 				new Query<ScheduleJobLogEntity>(params).getPage(),
-				new EntityWrapper<ScheduleJobLogEntity>().like(StringUtils.isNotBlank(jobId),"job_id", jobId)
-		);
+				new QueryWrapper<ScheduleJobLogEntity>().like(StringUtils.isNotBlank(jobId),"job_id", jobId)
+		);*/
+		Page<ScheduleJobLogEntity> page = (Page<ScheduleJobLogEntity>) this.page(new Query<ScheduleJobLogEntity>(params).getPage(),
+				new QueryWrapper<ScheduleJobLogEntity>().like(StringUtils.isNotBlank(jobId),"job_id", jobId));
 
 		return new PageUtils(page);
 	}

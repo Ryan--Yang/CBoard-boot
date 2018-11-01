@@ -27,11 +27,11 @@ cBoard.service('chartChinaMapService', function () {
 
         var url;
         if (code == 'china') {
-            url = 'plugins/FineMap/mapdata/china.json'
+            url = 'statics/plugins/FineMap/mapdata/china.json'
         } else if (code.length > 2) {
-            url = 'plugins/FineMap/mapdata/geometryCouties/' + code + '.json';
+            url = 'statics/plugins/FineMap/mapdata/geometryCouties/' + code + '.json';
         } else {
-            url = 'plugins/FineMap/mapdata/geometryProvince/' + code + '.json';
+            url = 'statics/plugins/FineMap/mapdata/geometryProvince/' + code + '.json';
         }
 
         var fromName;

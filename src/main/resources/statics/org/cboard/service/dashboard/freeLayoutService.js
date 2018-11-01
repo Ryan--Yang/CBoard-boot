@@ -23,7 +23,7 @@ cBoard.service('freeLayoutService', function($http) {
 
     this.widgetData = ()=>{
         let promise = new Promise((resolve, reject)=>{
-            $http.get("dashboard/getWidgetList.do").success(function (response) {
+            $http.get("dashboard/getWidgetList").success(function (response) {
                 if (response) {
                     resolve(response);
                 }

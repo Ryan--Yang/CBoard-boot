@@ -16,8 +16,8 @@
 
 package io.renren.modules.oss.service.impl;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
 import io.renren.modules.oss.dao.SysOssDao;
@@ -33,9 +33,10 @@ public class SysOssServiceImpl extends ServiceImpl<SysOssDao, SysOssEntity> impl
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
-		Page<SysOssEntity> page = this.selectPage(
+		/*Page<SysOssEntity> page = this.selectPage(
 				new Query<SysOssEntity>(params).getPage()
-		);
+		);*/
+		Page<SysOssEntity> page = (Page<SysOssEntity>) this.page(new Query<SysOssEntity>(params).getPage(), null);
 
 		return new PageUtils(page);
 	}

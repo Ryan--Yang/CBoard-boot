@@ -1,8 +1,8 @@
 package io.renren.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.exception.RRException;
 import io.renren.common.utils.Constant;
 import io.renren.common.utils.PageUtils;
@@ -42,12 +42,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		String username = (String)params.get("username");
 		Long createUserId = (Long)params.get("createUserId");
 
-		Page<SysUserEntity> page = this.selectPage(
+		/*Page<SysUserEntity> page = this.selectPage(
 			new Query<SysUserEntity>(params).getPage(),
-			new EntityWrapper<SysUserEntity>()
+			new QueryWrapper<SysUserEntity>()
 				.like(StringUtils.isNotBlank(username),"username", username)
 				.eq(createUserId != null,"create_user_id", createUserId)
-		);
+		);*/
+		Page<SysUserEntity> page = (Page<SysUserEntity>) this.page(new Query<SysUserEntity>(params).getPage(),
+				new QueryWrapper<SysUserEntity>()
+						.like(StringUtils.isNotBlank(username),"username", username)
+						.eq(createUserId != null,"create_user_id", createUserId));
 
 		return new PageUtils(page);
 	}
@@ -69,19 +73,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	@Transactional
-	public void save(SysUserEntity user) {
+	public boolean save(SysUserEntity user) {
 		user.setCreateTime(new Date());
 		//sha256加密
 		String salt = RandomStringUtils.randomAlphanumeric(20);
 		user.setPassword(new Sha256Hash(user.getPassword(), salt).toHex());
 		user.setSalt(salt);
-		this.insert(user);
+		//this.insert(user);
+		this.save(user);
 		
 		//检查角色是否越权
 		checkRole(user);
 		
 		//保存用户与角色关系
 		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+		return false;
 	}
 
 	@Override
@@ -103,7 +109,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	public void deleteBatch(Long[] userId) {
-		this.deleteBatchIds(Arrays.asList(userId));
+		//this.deleteBatchIds(Arrays.asList(userId));
+		this.deleteBatch(userId);
 	}
 
 	@Override
@@ -111,7 +118,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setPassword(newPassword);
 		return this.update(userEntity,
-				new EntityWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
+				new QueryWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
 	}
 	
 	/**

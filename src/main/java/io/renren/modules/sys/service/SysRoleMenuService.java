@@ -1,6 +1,6 @@
 package io.renren.modules.sys.service;
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.modules.sys.entity.SysRoleMenuEntity;
 
 import java.util.List;

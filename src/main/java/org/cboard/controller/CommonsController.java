@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.cboard.dto.DashboardMenu;
 import org.cboard.dto.User;
 import org.cboard.services.*;
+import org.cboard.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,17 @@ public class CommonsController extends BaseController {
     @Autowired
     private PersistService persistService;
 
+
+    /*private AuthenticationService authenticationService;
+     */
+    @RequestMapping(value = "/getUserDetail")
+    public User getUserDetail() {
+        //return authenticationService.getCurrentUser();
+        User user = new User();
+        user.setName("admin");
+        user.setUserId("1");
+        return user;
+    }
 
     @RequestMapping(value = "/getMenuList")
     public List<DashboardMenu> getMenuList() {

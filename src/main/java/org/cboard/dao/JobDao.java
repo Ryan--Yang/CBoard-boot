@@ -1,5 +1,6 @@
 package org.cboard.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.cboard.pojo.DashboardJob;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * Created by yfyuan on 2017/2/17.
  */
+@Mapper
 @Repository
 public interface JobDao {
     int save(DashboardJob job);

@@ -103,7 +103,7 @@
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
                                     <li ng-class="{true:'active',false:'false'}[{{$index}}=={{widget.relations.index}}]" id="{{rowIndex}}_{{widgetIndex}}_{{$index}}_tab" ng-repeat="a in widget.relations.relations" ng-init="widget.relations.index=0;">
-                                        <a href="#{{rowIndex}}_{{widgetIndex}}_{{$index}}_content" data-toggle="tab" aria-expanded="false">
+                                        <a href="#[{{rowIndex}}_{{widgetIndex}}_{{$index}}]_content" data-toggle="tab" aria-expanded="false">
                                             <i ng-show="a.type=='widget'" class="fa fa-line-chart"></i><i ng-show="a.type=='board'" class="fa fa-dashboard"></i>{{'CONFIG.DASHBOARD.RELATION'|translate}}{{$index+1}}
                                             <button type="button" ng-click="widget.relations.relations.splice($index, 1);changeActive(rowIndex,widgetIndex,$index);widget.relations.index=0" class="btn btn-box-tool" title="{{'COMMON.REMOVE'|translate}}"
                                             style="position:absolute;top:0px;right:0px;"><i class="fa fa-times"></i>

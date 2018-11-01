@@ -17,7 +17,7 @@
 package io.renren.modules.sys.service;
 
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.sys.entity.SysConfigEntity;
 
@@ -37,7 +37,7 @@ public interface SysConfigService extends IService<SysConfigEntity>  {
 	/**
 	 * 保存配置信息
 	 */
-	public void save(SysConfigEntity config);
+	public boolean save(SysConfigEntity config);
 	
 	/**
 	 * 更新配置信息

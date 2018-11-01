@@ -16,9 +16,9 @@
 
 package io.renren.modules.job.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.utils.Constant;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
@@ -46,7 +46,8 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 	 */
 	@PostConstruct
 	public void init(){
-		List<ScheduleJobEntity> scheduleJobList = this.selectList(null);
+		//List<ScheduleJobEntity> scheduleJobList = this.selectList(null);
+		List<ScheduleJobEntity> scheduleJobList = this.list(null);
 		for(ScheduleJobEntity scheduleJob : scheduleJobList){
 			CronTrigger cronTrigger = ScheduleUtils.getCronTrigger(scheduler, scheduleJob.getJobId());
             //如果不存在，则创建
@@ -62,9 +63,13 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 	public PageUtils queryPage(Map<String, Object> params) {
 		String beanName = (String)params.get("beanName");
 
-		Page<ScheduleJobEntity> page = this.selectPage(
+		/*Page<ScheduleJobEntity> page = this.selectPage(
 				new Query<ScheduleJobEntity>(params).getPage(),
-				new EntityWrapper<ScheduleJobEntity>().like(StringUtils.isNotBlank(beanName),"bean_name", beanName)
+				new QueryWrapper<ScheduleJobEntity>().like(StringUtils.isNotBlank(beanName),"bean_name", beanName)
+		);*/
+		Page<ScheduleJobEntity> page = (Page<ScheduleJobEntity>) this.page(
+				new Query<ScheduleJobEntity>(params).getPage(),
+				new QueryWrapper<ScheduleJobEntity>().like(StringUtils.isNotBlank(beanName),"bean_name", beanName)
 		);
 
 		return new PageUtils(page);
@@ -73,12 +78,14 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void save(ScheduleJobEntity scheduleJob) {
+	public boolean save(ScheduleJobEntity scheduleJob) {
 		scheduleJob.setCreateTime(new Date());
 		scheduleJob.setStatus(Constant.ScheduleStatus.NORMAL.getValue());
-        this.insert(scheduleJob);
+        //this.insert(scheduleJob);
+        this.save(scheduleJob);
         
         ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+        return false;
     }
 	
 	@Override
@@ -97,7 +104,8 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
     	}
     	
     	//删除数据
-    	this.deleteBatchIds(Arrays.asList(jobIds));
+    	//this.deleteBatchIds(Arrays.asList(jobIds));
+    	this.deleteBatch(jobIds);
 	}
 
 	@Override
@@ -112,7 +120,8 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 	@Transactional(rollbackFor = Exception.class)
     public void run(Long[] jobIds) {
     	for(Long jobId : jobIds){
-    		ScheduleUtils.run(scheduler, this.selectById(jobId));
+    		//ScheduleUtils.run(scheduler, this.selectById(jobId));
+    		ScheduleUtils.run(scheduler, this.getById(jobId));
     	}
     }
 

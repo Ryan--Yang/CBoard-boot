@@ -404,7 +404,7 @@ span.returnIcon {
 }
 .layoutPanel{
     position: relative;
-    /*background: url("../../imgs/layout.svg") 50% 50% no-repeat;*/
+    /*background: url("../imgs/layout.svg") 50% 50% no-repeat;*/
 }
 .drag-preview {
     border: 2px dashed grey;

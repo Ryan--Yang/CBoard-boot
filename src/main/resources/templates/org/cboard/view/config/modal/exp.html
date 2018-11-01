@@ -35,7 +35,7 @@
                          style="min-height: 35px;height: auto;padding: 0px">
                 <span ng-repeat="o in expressions"
                       class="btn btn-default btn-sm" style="margin: 3px 3px;"
-                      ng-click="addToken('${' + o.alias + '}', false)">{{'${' + o.alias + '}'}}</span>
+                      ng-click="addToken(o.alias, false)">{{ o.alias }}</span>
                     </div>
                 </div>
             </div>

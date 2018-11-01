@@ -132,7 +132,15 @@ public class DashboardController extends BaseController {
     }
 
     @RequestMapping(value = "/getDatasourceView")
+    @ResponseBody
     public String getDatasourceView(@RequestParam(name = "type") String type) {
+        /*String tmp = DataProviderViewManager.getDatasourceView(type);
+        System.out.println("data provider: " + tmp);
+        return "<div class=\"form-group\">" +
+                "    <label>{{'DATAPROVIDER.JDBC.JDBCURL'|translate}} *</label>" +
+                "            <input ng-model=\"curDatasource.config.jdbcurl\" class=\"form-control input-sm\" placeholder=\"\" />" +
+                "    </div>";*/
+        //System.out.println("origin: " + DataProviderViewManager.getDatasourceView(type));
         return DataProviderViewManager.getDatasourceView(type);
     }
 
@@ -145,6 +153,7 @@ public class DashboardController extends BaseController {
     public ServiceStatus updateDatasource(@RequestParam(name = "json") String json) {
         return datasourceService.update(tlUser.get().getUserId(), json);
     }
+    //tlUser.get().getUserId()
 
     @RequestMapping(value = "/deleteDatasource")
     public ServiceStatus deleteDatasource(@RequestParam(name = "id") Long id) {
@@ -451,7 +460,7 @@ public class DashboardController extends BaseController {
     private String imgPath(HttpServletRequest request) {
         String templateDir = request.getSession().getServletContext().getRealPath("/");
         templateDir = templateDir.replace("\\","/");
-        templateDir = templateDir + "imgs/cockpit";
+        templateDir = templateDir + "statics/imgs/cockpit";
         return templateDir;
     }
 

@@ -13,6 +13,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.io.Serializable;
+
 /**
  * 有@LoginUser注解的方法参数，注入当前登录用户
  * @author chenshun
@@ -39,7 +41,8 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
         }
 
         //获取用户信息
-        UserEntity user = userService.selectById((Long)object);
+        //UserEntity user = userService.selectById((Long)object);
+        UserEntity user = userService.getById((Serializable) object);
 
         return user;
     }

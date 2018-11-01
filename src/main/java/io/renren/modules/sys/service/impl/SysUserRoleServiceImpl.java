@@ -1,6 +1,6 @@
 package io.renren.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.utils.MapUtils;
 import io.renren.modules.sys.dao.SysUserRoleDao;
 import io.renren.modules.sys.entity.SysUserRoleEntity;
@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 /**
  * 用户与角色对应关系
@@ -25,7 +23,8 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserR
 	@Override
 	public void saveOrUpdate(Long userId, List<Long> roleIdList) {
 		//先删除用户与角色关系
-		this.deleteByMap(new MapUtils().put("user_id", userId));
+		//this.deleteByMap(new MapUtils().put("user_id", userId));
+		this.removeByMap(new MapUtils().put("user_id", userId));
 
 		if(roleIdList == null || roleIdList.size() == 0){
 			return ;
@@ -40,7 +39,8 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserR
 
 			list.add(sysUserRoleEntity);
 		}
-		this.insertBatch(list);
+		//this.insertBatch(list);
+		this.saveBatch(list);
 	}
 
 	@Override

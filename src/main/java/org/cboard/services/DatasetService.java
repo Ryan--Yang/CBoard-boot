@@ -45,6 +45,7 @@ public class DatasetService {
     }
 
     public ServiceStatus update(String userId, String json) {
+        System.out.println("json: " + json);
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardDataset dataset = new DashboardDataset();
         dataset.setUserId(userId);
