@@ -16,8 +16,8 @@
 
 package io.renren.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.code.kaptcha.Producer;
 import io.renren.common.exception.RRException;
 import io.renren.common.utils.DateUtils;
@@ -55,20 +55,23 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
         captchaEntity.setCode(code);
         //5分钟后过期
         captchaEntity.setExpireTime(DateUtils.addDateMinutes(new Date(), 5));
-        this.insert(captchaEntity);
+        //this.insert(captchaEntity);
+        this.save(captchaEntity);
 
         return producer.createImage(code);
     }
 
     @Override
     public boolean validate(String uuid, String code) {
-        SysCaptchaEntity captchaEntity = this.selectOne(new EntityWrapper<SysCaptchaEntity>().eq("uuid", uuid));
+        //SysCaptchaEntity captchaEntity = this.selectOne(new QueryWrapper<SysCaptchaEntity>().eq("uuid", uuid));
+        SysCaptchaEntity captchaEntity = this.getOne(new QueryWrapper<SysCaptchaEntity>().eq("uuid", uuid));
         if(captchaEntity == null){
             return false;
         }
 
         //删除验证码
-        this.deleteById(uuid);
+        //this.deleteById(uuid);
+        this.removeById(uuid);
 
         if(captchaEntity.getCode().equalsIgnoreCase(code) && captchaEntity.getExpireTime().getTime() >= System.currentTimeMillis()){
             return true;

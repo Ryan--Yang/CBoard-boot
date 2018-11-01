@@ -1,5 +1,7 @@
 package org.cboard.dao;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.cboard.pojo.DashboardBoard;
 import org.cboard.pojo.DashboardBoardParam;
 import org.springframework.stereotype.Repository;
@@ -10,6 +12,7 @@ import java.util.Map;
 /**
  * Created by yfyuan on 2016/8/23.
  */
+@Mapper
 @Repository
 public interface CBoardDao {
 

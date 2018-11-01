@@ -11,7 +11,7 @@ body {margin:0 auto;overflow:hidden;}
 	}
 .header canvas {
 	width:100%;height:auto/*默认全屏显示 可自己设置高度640px*/;
-	display:inline-block;vertical-align:baseline
+	display:inline-block;vertical-align:baseline;
 	position:absolute;
 	z-index:-1;
 	}

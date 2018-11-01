@@ -185,7 +185,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             {name: translate('CONFIG.WIDGET.YELLOW'), value: 'bg-yellow'}
         ];
 
-        $.getJSON('plugins/FineMap/mapdata/citycode.json', function (data) {
+        $.getJSON('statics/plugins/FineMap/mapdata/citycode.json', function (data) {
             $scope.provinces = data.provinces;
         });
 

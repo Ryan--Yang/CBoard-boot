@@ -1,5 +1,6 @@
 package org.cboard.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.cboard.pojo.DashboardDataset;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 /**
  * Created by yfyuan on 2016/10/11.
  */
+@Mapper
 @Repository
 public interface DatasetDao {
 
@@ -30,6 +32,6 @@ public interface DatasetDao {
 
     DashboardDataset getDataset(Long id);
 
-    long checkDatasetRole(String userId, Long widgetId, String permissionPattern);
+    long checkDatasetRole(String userId, Long datasetId, String permissionPattern);
 
 }

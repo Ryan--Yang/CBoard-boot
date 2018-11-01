@@ -48,7 +48,8 @@ public class TestTask {
 			e.printStackTrace();
 		}
 		
-		SysUserEntity user = sysUserService.selectById(1L);
+		//SysUserEntity user = sysUserService.selectById(1L);
+		SysUserEntity user = sysUserService.getById(1L);
 		System.out.println(ToStringBuilder.reflectionToString(user));
 		
 	}

@@ -23,14 +23,14 @@ cBoard.service('chartAreaMapService', function ($state, $window) {
         }
         var url, zoomLevel;
         if (code == 'china') {
-            url = 'plugins/FineMap/mapdata/china.json'
+            url = 'statics/plugins/FineMap/mapdata/china.json'
             zoomLevel = 1;
         } else if (code.length > 2) {
             zoomLevel = 3;
-            url = 'plugins/FineMap/mapdata/geometryCouties/' + code + '.json';
+            url = 'statics/plugins/FineMap/mapdata/geometryCouties/' + code + '.json';
         } else {
             zoomLevel = 2;
-            url = 'plugins/FineMap/mapdata/geometryProvince/' + code + '.json';
+            url = 'statics/plugins/FineMap/mapdata/geometryProvince/' + code + '.json';
         }
         var mapOption = null;
         var groups = _.map(casted_values, function (val) {

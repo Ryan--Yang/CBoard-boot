@@ -1,5 +1,6 @@
 package org.cboard.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.cboard.pojo.DashboardRole;
 import org.cboard.pojo.DashboardRoleRes;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * Created by yfyuan on 2016/12/6.
  */
+@Mapper
 @Repository
 public interface RoleDao {
     int save(DashboardRole role);

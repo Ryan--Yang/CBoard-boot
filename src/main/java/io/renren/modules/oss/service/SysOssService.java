@@ -16,7 +16,7 @@
 
 package io.renren.modules.oss.service;
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.oss.entity.SysOssEntity;
 

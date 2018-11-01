@@ -1,6 +1,6 @@
 package io.renren.modules.sys.service;
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.sys.entity.SysRoleEntity;
 
@@ -19,7 +19,7 @@ public interface SysRoleService extends IService<SysRoleEntity> {
 
 	PageUtils queryPage(Map<String, Object> params);
 
-	void save(SysRoleEntity role);
+	boolean save(SysRoleEntity role);
 
 	void update(SysRoleEntity role);
 

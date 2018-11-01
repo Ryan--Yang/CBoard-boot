@@ -16,7 +16,7 @@
 
 package io.renren.modules.job.service;
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.job.entity.ScheduleJobEntity;
 
@@ -35,7 +35,8 @@ public interface ScheduleJobService extends IService<ScheduleJobEntity> {
 	/**
 	 * 保存定时任务
 	 */
-	void save(ScheduleJobEntity scheduleJob);
+	@Override
+	boolean save(ScheduleJobEntity scheduleJob);
 	
 	/**
 	 * 更新定时任务

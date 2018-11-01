@@ -209,8 +209,8 @@ cBoard.controller('datasourceCtrl', function ($scope, $state, $stateParams, $htt
     $scope.test = function () {
         var datasource = $scope.curDatasource;
         $uibModal.open({
-            templateUrl: 'org/cboard/view/config/modal/test.html',
-            windowTemplateUrl: 'org/cboard/view/util/modal/window.html',
+            templateUrl: 'statics/org/cboard/view/config/modal/test.html',
+            windowTemplateUrl: 'statics/org/cboard/view/util/modal/window.html',
             size: 'lg',
             backdrop: false,
             controller: function ($scope, $uibModalInstance) {
@@ -255,7 +255,7 @@ cBoard.controller('datasourceCtrl', function ($scope, $state, $stateParams, $htt
                     }
                     return true;
                 };
-                $scope = function () {
+                $scope.do = function () {
                     if (!validate()) {
                         return;
                     }

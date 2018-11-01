@@ -32,6 +32,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static java.util.concurrent.Executors.*;
+
 
 /**
  * 定时任务
@@ -41,8 +43,8 @@ import java.util.concurrent.Future;
  */
 public class ScheduleJob extends QuartzJobBean {
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	private ExecutorService service = Executors.newSingleThreadExecutor(); 
-	
+	private ExecutorService service = Executors.newSingleThreadExecutor();
+
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         ScheduleJobEntity scheduleJob = (ScheduleJobEntity) context.getMergedJobDataMap()
@@ -89,7 +91,8 @@ public class ScheduleJob extends QuartzJobBean {
 			log.setStatus(1);
 			log.setError(StringUtils.substring(e.toString(), 0, 2000));
 		}finally {
-			scheduleJobLogService.insert(log);
+			//scheduleJobLogService.insert(log);
+			scheduleJobLogService.save(log);
 		}
     }
 }

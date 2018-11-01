@@ -159,7 +159,7 @@ hexCockpit.getBorderStyle = function (basePath) {
     var borderStyle = new Array();
     for (var i = 1; i <= 11; i++) {
         var key = '框' + i;
-        var value = (basePath ? basePath : '') + 'imgs/cockpit/border/' + (i < 10 ? '0' + i : i) + '.png';
+        var value = (basePath ? basePath : '') + 'statics/imgs/cockpit/border/' + (i < 10 ? '0' + i : i) + '.png';
         value = 'url(' + value + ')';
         borderStyle.push({key: key, value: value})
     }
@@ -176,7 +176,7 @@ hexCockpit.getOrnamentStyle = function (basePath) {
     var ornamentStyle = new Array();
     for (var i = 1; i <= 10; i++) {
         var gif = 'gif' + i;
-        var value = (basePath ? basePath : '') + 'imgs/cockpit/ornament/' + gif + '.gif';
+        var value = (basePath ? basePath : '') + 'statics/imgs/cockpit/ornament/' + gif + '.gif';
         ornamentStyle.push({key: gif, value: value});
     }
     return ornamentStyle;

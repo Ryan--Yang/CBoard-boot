@@ -10,7 +10,7 @@ cBoard.service('dataService', function ($http, $q, updateService) {
         if (datasetList) {
             deferred.resolve(angular.copy(datasetList));
         } else {
-            $http.get("dashboard/getDatasetList.do").success(function (data) {
+            $http.get("dashboard/getDatasetList").success(function (data) {
                 deferred.resolve(data);
             });
         }
@@ -139,7 +139,7 @@ cBoard.service('dataService', function ($http, $q, updateService) {
                 cfg.filters = getDimensionConfig(chartConfig.filters);
             }
 
-            $http.post("dashboard/getDimensionValues.do", {
+            $http.post("dashboard/getDimensionValues", {
                 datasourceId: datasource,
                 query: angular.toJson(query),
                 datasetId: datasetId,
@@ -165,7 +165,7 @@ cBoard.service('dataService', function ($http, $q, updateService) {
             cfg.values = _.map(dataSeries, function (s) {
                 return {column: s.name, aggType: s.aggregate};
             });
-            $http.post("dashboard/getAggregateData.do", {
+            $http.post("dashboard/getAggregateData", {
                 datasourceId: datasource,
                 query: angular.toJson(query),
                 datasetId: datasetId,
@@ -297,7 +297,7 @@ cBoard.service('dataService', function ($http, $q, updateService) {
             cfg.values = _.map(dataSeries, function (s) {
                 return {column: s.name, aggType: s.aggregate};
             });
-            $http.post("dashboard/viewAggDataQuery.do", {
+            $http.post("dashboard/viewAggDataQuery", {
                 datasourceId: params.datasource,
                 query: angular.toJson(params.query),
                 datasetId: params.datasetId,
@@ -309,7 +309,7 @@ cBoard.service('dataService', function ($http, $q, updateService) {
     };
 
     this.getColumns = function (option) {
-        $http.post("dashboard/getColumns.do", {
+        $http.post("dashboard/getColumns", {
             datasourceId: option.datasource,
             query: option.query ? angular.toJson(option.query) : null,
             datasetId: option.datasetId,

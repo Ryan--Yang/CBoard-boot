@@ -1,6 +1,6 @@
 package io.renren.modules.sys.service;
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.sys.entity.SysUserEntity;
 
@@ -38,7 +38,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 	/**
 	 * 保存用户
 	 */
-	void save(SysUserEntity user);
+	boolean save(SysUserEntity user);
 	
 	/**
 	 * 修改用户

@@ -1,5 +1,6 @@
 package org.cboard.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.cboard.pojo.DashboardCategory;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 /**
  * Created by yfyuan on 2016/8/26.
  */
+@Mapper
 @Repository
 public interface CategoryDao {
 

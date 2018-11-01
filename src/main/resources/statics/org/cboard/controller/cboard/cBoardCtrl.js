@@ -11,7 +11,7 @@ cBoard.controller('cBoardCtrl', function ($rootScope, $scope, $location, $http, 
 
     $http.get("commons/getUserDetail").success(function (response) {
         $scope.user = response;
-        var avatarUrl = 'dist/img/user-male-circle-blue-128.png';
+        var avatarUrl = 'statics/dist/img/user-male-circle-blue-128.png';
         $scope.user.avatar = avatarUrl;
     });
 

@@ -54,8 +54,9 @@ public class ScheduleJobLogController {
 	 */
 	@GetMapping("/info/{logId}")
 	public R info(@PathVariable("logId") Long logId){
-		ScheduleJobLogEntity log = scheduleJobLogService.selectById(logId);
-		
+		//ScheduleJobLogEntity log = scheduleJobLogService.selectById(logId);
+		ScheduleJobLogEntity log = scheduleJobLogService.getById(logId);
+
 		return R.ok().put("log", log);
 	}
 }

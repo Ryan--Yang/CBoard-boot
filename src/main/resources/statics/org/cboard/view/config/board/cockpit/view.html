@@ -62,7 +62,7 @@
             <!-- 画布-->
             <div class="cockpit-col">
                 <div id="cockpit-drag" class="cockpit-canvas"
-                     v-bind:style=" {width:dragWidth,height:dragHeight,background:(cockpitConf.background.includes('.')?'url(' + basePath + 'imgs/cockpit/' + cockpitConf.background + ') repeat':cockpitConf.background)} "
+                     v-bind:style=" {width:dragWidth,height:dragHeight,background:(cockpitConf.background.includes('.')?'url(' + basePath + 'statics/imgs/cockpit/' + cockpitConf.background + ') repeat':cockpitConf.background)} "
                      @drop='drop($event)' @dragover='allowDrop($event)'>
                     <div class="cockpit-block" v-for="cockpitComponent in cockpitComponents"
                          :id="cockpitComponent.domId"
@@ -124,7 +124,7 @@
                                     </el-form-item>
                                     <el-form-item label="背景图">
                                         <div style="width: 100%;height: 80px;"
-                                             v-bind:style="{background:cockpitConf.background.includes('.')?'url(' + basePath + 'imgs/cockpit/' + cockpitConf.background + ')  0% 0% / cover':cockpitConf.background,backgroundSize:'cover'}"/>
+                                             v-bind:style="{background:cockpitConf.background.includes('.')?'url(' + basePath + 'statics/imgs/cockpit/' + cockpitConf.background + ')  0% 0% / cover':cockpitConf.background,backgroundSize:'cover'}"/>
                                     </el-form-item>
                                 </el-form>
                             </el-collapse-item>

@@ -1,5 +1,6 @@
 package org.cboard.dataprovider;
 
+import com.alibaba.fastjson.JSONWriter;
 import com.google.common.collect.Ordering;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.lang.StringUtils;
@@ -12,8 +13,10 @@ import org.cboard.dataprovider.annotation.QueryParameter;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
@@ -37,7 +40,7 @@ public class DataProviderViewManager {
             LOG.error("", e);
         }
         props.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
-        props.setProperty(velocityEngine.FILE_RESOURCE_LOADER_PATH, fileDir);
+        props.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, fileDir);
         props.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
         props.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
         props.setProperty("runtime.log.logsystem.log4j.logger", "velocity");
@@ -113,7 +116,8 @@ public class DataProviderViewManager {
             context.put("params", params);
             StringBuilderWriter stringBuilderWriter = new StringBuilderWriter();
             velocityEngine.mergeTemplate("query.vm", "utf-8", context, stringBuilderWriter);
-            return stringBuilderWriter.toString();
+            return stringBuilderWriter.toString().replaceAll("\\\\", "")
+                    .replaceAll("\r|\n", "").replace("\"", "'");
         }
         return null;
     }
@@ -153,7 +157,10 @@ public class DataProviderViewManager {
             context.put("params", params);
             StringBuilderWriter stringBuilderWriter = new StringBuilderWriter();
             velocityEngine.mergeTemplate("datasource.vm", "utf-8", context, stringBuilderWriter);
-            return stringBuilderWriter.toString();
+            //return stringBuilderWriter.toString();
+
+            return stringBuilderWriter.toString().replaceAll("\\\\", "")
+                    .replaceAll("\r|\n", "").replace("\"", "'");
         }
         return null;
     }
