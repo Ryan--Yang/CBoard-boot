@@ -74,4 +74,9 @@ public class DatasetService {
         datasetDao.delete(id, userId);
         return new ServiceStatus(ServiceStatus.Status.Success, "success");
     }
+
+    public DashboardDataset getDateset(Long datasetId){
+        DashboardDataset dataset = datasetDao.getDataset(datasetId);
+        return dataset;
+    }
 }

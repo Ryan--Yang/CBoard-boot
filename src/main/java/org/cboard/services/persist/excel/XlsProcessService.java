@@ -80,6 +80,7 @@ public class XlsProcessService {
         for (JSONArray rw : widgetRows) {
             for (int i = 0; i < rw.size(); i++) {
                 JSONObject widget = rw.getJSONObject(i);
+                persistContext.setData(widget);
                 JSONObject v = persistContext.getData().getJSONObject(widget.getLong("widgetId").toString());
                 if (v != null && "table".equals(v.getString("type"))) {
                     tables++;
@@ -125,6 +126,7 @@ public class XlsProcessService {
                 for (int i = 0; i < rw.size(); i++) {
 
                     JSONObject widget = rw.getJSONObject(i);
+                    persistContext.setData(widget);
                     JSONObject v = persistContext.getData().getJSONObject(widget.getLong("widgetId").toString());
                     if (v == null || v.keySet().size() == 0) {
                         continue;
@@ -161,6 +163,7 @@ public class XlsProcessService {
         for (JSONArray rw : widgetRows) {
             for (int i = 0; i < rw.size(); i++) {
                 JSONObject widget = rw.getJSONObject(i);
+                persistContext.setData(widget);
                 JSONObject v = persistContext.getData().getJSONObject(widget.getLong("widgetId").toString());
                 if (v == null || !"table".equals(v.getString("type"))) {
                     continue;

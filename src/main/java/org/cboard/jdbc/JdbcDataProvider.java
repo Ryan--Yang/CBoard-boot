@@ -96,6 +96,77 @@ public class JdbcDataProvider extends DataProvider implements Aggregatable, Init
     }
 
     @Override
+    public String[][] getDatasetData(Integer page, Integer limit) throws Exception {
+        System.out.println("********************** use jdbc provider(getDatasetData)! ************************");
+        final int batchSize = 100000;
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        LOG.debug("Execute JdbcDataProvider.getData() Start!");
+        String sql = getAsSubQuery(query.get(SQL));
+        String resultSql = "";
+        List<String[]> list = null;
+        LOG.info("SQL String: " + resultSql);
+
+        if(page != null && limit != null){
+            resultSql = sql + " limit " + (page-1)*limit + ", " + limit;
+        }else {
+            resultSql = sql;
+        }
+
+        try (Connection con = getConnection();
+             Statement ps = con.createStatement();
+             ResultSet rs = ps.executeQuery(resultSql)) {
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            list = new LinkedList<>();
+            String[] row = new String[columnCount];
+            for (int i = 0; i < columnCount; i++) {
+                row[i] = metaData.getColumnLabel(i + 1);
+            }
+            list.add(row);
+
+            String[] header = row;
+            getInnerAggregator().beforeLoad(header);
+
+            int resultCount = 0;
+            int threadId = 0;
+            ExecutorService executor = Executors.newFixedThreadPool(5);
+            while (rs.next()) {
+                resultCount++;
+                row = new String[columnCount];
+                for (int j = 0; j < columnCount; j++) {
+                    row[j] = rs.getString(j + 1);
+                }
+                list.add(row);
+
+                if (resultCount % batchSize == 0) {
+                    LOG.info("JDBC load batch {}", resultCount);
+                    final String[][] batchData = list.toArray(new String[][]{});
+                    Thread loadThread = new Thread(() -> {
+                        getInnerAggregator().loadBatch(header, batchData);
+                    }, threadId++ + "");
+                    executor.execute(loadThread);
+                    list.clear();
+                }
+                if (resultCount > resultLimit) {
+                    throw new CBoardException("Cube result count " + resultCount + ", is greater than limit " + resultLimit);
+                }
+            }
+            executor.shutdown();
+            while (!executor.awaitTermination(10, TimeUnit.SECONDS));
+            final String[][] batchData = list.toArray(new String[][]{});
+            getInnerAggregator().loadBatch(header, batchData);
+        } catch (Exception e) {
+            LOG.error("ERROR:" + e.getMessage());
+            throw new Exception("ERROR:" + e.getMessage(), e);
+        }
+        getInnerAggregator().afterLoad();
+        stopwatch.stop();
+        LOG.info("getDatasetData() using time: {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        return list.toArray(new String[][]{});
+    }
+
+    @Override
     public String[][] getData() throws Exception {
         final int batchSize = 100000;
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -115,6 +186,7 @@ public class JdbcDataProvider extends DataProvider implements Aggregatable, Init
             for (int i = 0; i < columnCount; i++) {
                 row[i] = metaData.getColumnLabel(i + 1);
             }
+            list.add(row);
 
             String[] header = row;
             getInnerAggregator().beforeLoad(header);
@@ -154,11 +226,12 @@ public class JdbcDataProvider extends DataProvider implements Aggregatable, Init
         getInnerAggregator().afterLoad();
         stopwatch.stop();
         LOG.info("getData() using time: {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
-        return null;
+        return list.toArray(new String[][]{});
     }
 
     @Override
     public void test() throws Exception {
+        System.out.println("********************** use jdbc provider(test)! ********************");
         String queryStr = query.get(SQL);
         LOG.info("Execute query: {}", queryStr);
         try (Connection con = getConnection();

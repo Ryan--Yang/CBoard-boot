@@ -9,6 +9,7 @@ import com.google.common.hash.Hashing;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.cboard.dao.*;
+import org.cboard.dataprovider.DataProvider;
 import org.cboard.dataprovider.DataProviderManager;
 import org.cboard.dataprovider.DataProviderViewManager;
 import org.cboard.dataprovider.config.AggConfig;
@@ -134,13 +135,6 @@ public class DashboardController extends BaseController {
     @RequestMapping(value = "/getDatasourceView")
     @ResponseBody
     public String getDatasourceView(@RequestParam(name = "type") String type) {
-        /*String tmp = DataProviderViewManager.getDatasourceView(type);
-        System.out.println("data provider: " + tmp);
-        return "<div class=\"form-group\">" +
-                "    <label>{{'DATAPROVIDER.JDBC.JDBCURL'|translate}} *</label>" +
-                "            <input ng-model=\"curDatasource.config.jdbcurl\" class=\"form-control input-sm\" placeholder=\"\" />" +
-                "    </div>";*/
-        //System.out.println("origin: " + DataProviderViewManager.getDatasourceView(type));
         return DataProviderViewManager.getDatasourceView(type);
     }
 

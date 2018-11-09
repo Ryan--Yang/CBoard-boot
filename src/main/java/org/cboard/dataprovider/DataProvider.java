@@ -12,13 +12,9 @@ import org.cboard.dataprovider.config.ConfigComponent;
 import org.cboard.dataprovider.config.DimensionConfig;
 import org.cboard.dataprovider.expression.NowFunction;
 import org.cboard.dataprovider.result.AggregateResult;
-import org.cboard.pojo.DashboardRole;
-import org.cboard.services.AuthenticationService;
-import org.cboard.services.RoleService;
 import org.cboard.util.NaturalOrderComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,8 +27,8 @@ public abstract class DataProvider {
 
     // @Autowired
     // private AuthenticationService authenticationService;
-    @Autowired
-    private RoleService roleService;
+    /*@Autowired
+    private RoleService roleService;*/
     private InnerAggregator innerAggregator;
     protected Map<String, String> dataSource;
     protected Map<String, String> query;
@@ -154,10 +150,10 @@ public abstract class DataProvider {
             // list.add(authenticationService.getCurrentUser().getUsername());
         } else if ("{userName}".equals(value)) {
             // list.add(authenticationService.getCurrentUser().getName());
-        } else if ("{userRoles}".equals(value)) {
+        } /*else if ("{userRoles}".equals(value)) {
             List<DashboardRole> roles = roleService.getCurrentRoleList();
             roles.forEach(role -> list.add(role.getRoleName()));
-        } else {
+        }*/ else {
             list.add(AviatorEvaluator.compile(value.substring(1, value.length() - 1), true).execute().toString());
         }
         return list.stream();
@@ -192,6 +188,8 @@ public abstract class DataProvider {
     }
 
     abstract public String[][] getData() throws Exception;
+
+    abstract public String[][] getDatasetData(Integer page, Integer limit) throws Exception;
 
     public void test() throws Exception {
         getData();

@@ -560,6 +560,11 @@ public class ElasticsearchDataProvider extends DataProvider implements Aggregata
     }
 
     @Override
+    public String[][] getDatasetData(Integer page, Integer limit) throws Exception {
+        return null;
+    }
+
+    @Override
     public void test() throws Exception {
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         HttpGet httpget = new HttpGet(getMappingUrl());

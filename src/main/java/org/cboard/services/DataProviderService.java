@@ -60,6 +60,18 @@ public class DataProviderService {
         return Maps.transformValues(datasourceConfig, Functions.toStringFunction());
     }
 
+    public String[][] getDatasetData(Long datasourceId, Map<String, String> query, Long datasetId){
+        try {
+            Dataset dataset = getDataset(datasetId);
+            DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
+            return dataProvider.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOG.error("", e);
+            throw new CBoardException(e.getMessage());
+        }
+    }
+
     public AggregateResult queryAggData(Long datasourceId, Map<String, String> query, Long datasetId, AggConfig config, boolean reload) {
         try {
             Dataset dataset = getDataset(datasetId);

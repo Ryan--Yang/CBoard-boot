@@ -179,6 +179,11 @@
 			<artifactId>commons-email</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.0.2</version>
+		</dependency>
 		<!-- Presto JDBC Start -->
 		<dependency>
 			<groupId>com.facebook.presto</groupId>
@@ -306,12 +311,12 @@
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>${quartz.version}</version>
-			<exclusions>
+			<!--<exclusions>
 				<exclusion>
 					<groupId>com.mchange</groupId>
 					<artifactId>c3p0</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions>-->
 		</dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
