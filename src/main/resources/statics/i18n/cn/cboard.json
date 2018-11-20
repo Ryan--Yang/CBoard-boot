@@ -391,7 +391,7 @@
     "POOLEDCONNECTION": "是否使用连接池",
     "JDBC": {
       "DRIVER": "驱动类 (如: com.mysql.jdbc.Driver)",
-      "JDBCURL": "连接串 (如: jdbc:mysql://hostname:port/db)",
+      "JDBCURL": "连接串 (如: jdbc:mysql://hostname:port/db?characterEncoding=utf8&useSSL=true)",
       "USERNAME": "数据库用户名",
       "PASSWORD": "数据库密码",
       "SQLTEXT": "查询语句"

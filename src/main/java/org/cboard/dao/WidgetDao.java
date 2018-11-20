@@ -18,9 +18,9 @@ public interface WidgetDao {
 
     List<DashboardWidget> getAllWidgetList();
 
-    List<DashboardWidget> getWidgetList(String userId);
+    List<DashboardWidget> getWidgetList(Long userId);
 
-    List<DashboardWidget> getWidgetListAdmin(String userId);
+    List<DashboardWidget> getWidgetListAdmin(Long userId);
 
     int save(DashboardWidget dashboardWidget);
 
@@ -28,9 +28,9 @@ public interface WidgetDao {
 
     int update(DashboardWidget dashboardWidget);
 
-    int delete(Long id, String userId);
+    int delete(Long widgetId, Long userId);
 
-    DashboardWidget getWidget(Long id);
+    DashboardWidget getWidget(Long widgetId);
 
-    long checkWidgetRole(String userId, Long widgetId, String permissionPattern);
+    long checkWidgetRole(Long userId, Long widgetId);
 }

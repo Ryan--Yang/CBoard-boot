@@ -19,6 +19,7 @@ package io.renren.modules.sys.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.renren.modules.sys.entity.SysMenuEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ import java.util.List;
  * @date 2016年9月18日 上午9:33:01
  */
 @Mapper
+@Repository
 public interface SysMenuDao extends BaseMapper<SysMenuEntity> {
 	
 	/**

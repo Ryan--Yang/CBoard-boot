@@ -47,7 +47,7 @@ public class DatasetDataServiceImpl implements DatasetDataService {
         DashboardDatasource datasource = datasourceDao.getDatasource(datasourceId);
         JSONObject datasourceConfig = JSONObject.parseObject(datasource.getConfig());
         Map<String, String> dataSource = Maps.transformValues(datasourceConfig, Functions.toStringFunction());
-        DataProvider dataProvider = DataProviderManager.getDataProvider(datasource.getType(), dataSource, query);
+        DataProvider dataProvider = DataProviderManager.getDataProvider(datasource.getSourceType(), dataSource, query);
         if (dataset != null && dataset.getInterval() != null && dataset.getInterval() > 0) {
             dataProvider.setInterval(dataset.getInterval());
         }
@@ -56,9 +56,6 @@ public class DatasetDataServiceImpl implements DatasetDataService {
 
     @Override
     public List<Map<String,String>> getDatasetData(Long datasourceId, Map<String, String> query, Long datasetId, Long userId, Integer page, Integer limit){
-        if(page == null || limit == null){
-
-        }
         try {
             Dataset dataset = getDataset(datasetId);
             DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
@@ -94,7 +91,7 @@ public class DatasetDataServiceImpl implements DatasetDataService {
         private JSONObject schema;
 
         public Dataset(DashboardDataset dataset) {
-            JSONObject data = JSONObject.parseObject(dataset.getData());
+            JSONObject data = JSONObject.parseObject(dataset.getDataJson());
             this.query = Maps.transformValues(data.getJSONObject("query"), Functions.toStringFunction());
             this.datasourceId = data.getLong("datasource");
             this.interval = data.getLong("interval");

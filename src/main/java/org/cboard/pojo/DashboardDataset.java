@@ -1,19 +1,27 @@
 package org.cboard.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by yfyuan on 2016/10/11.
  */
-public class DashboardDataset {
+@TableName("dashboard_dataset")
+public class DashboardDataset implements Serializable {
 
-    private Long id;
-    private String userId;
-    private String name;
+
+    private Long datasetId;
+    private Long userId;
+    private String datasetName;
     private String categoryName;
-    private String data;
+    private String dataJson;
     private String permission;
+    @TableField(exist=false)
     private String userName;
+    @TableField(exist=false)
     private String loginName;
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -26,28 +34,28 @@ public class DashboardDataset {
         this.permission = permission;
     }
 
-    public Long getId() {
-        return id;
+    public Long getDatasetId() {
+        return datasetId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDatasetId(Long datasetId) {
+        this.datasetId = datasetId;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getDatasetName() {
+        return datasetName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDatasetName(String datasetName) {
+        this.datasetName = datasetName;
     }
 
     public String getCategoryName() {
@@ -58,12 +66,12 @@ public class DashboardDataset {
         this.categoryName = categoryName;
     }
 
-    public String getData() {
-        return data;
+    public String getDataJson() {
+        return dataJson;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataJson(String dataJson) {
+        this.dataJson = dataJson;
     }
 
     public String getUserName() {

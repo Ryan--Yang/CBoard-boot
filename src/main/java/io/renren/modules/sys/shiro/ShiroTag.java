@@ -14,34 +14,30 @@
  * the License.
  */
 
-package io.renren.modules.sys.dao;
+package io.renren.modules.sys.shiro;
 
-
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.renren.modules.sys.entity.SysConfigEntity;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Component;
 
 /**
- * 系统配置信息
+ * Shiro权限标签
  * 
  * @author chenshun
  * @email sunlightcs@gmail.com
- * @date 2016年12月4日 下午6:46:16
+ * @date 2016年12月3日 下午11:32:47
  */
-@Mapper
-@Repository
-public interface SysConfigDao extends BaseMapper<SysConfigEntity> {
+@Component
+public class ShiroTag {
 
 	/**
-	 * 根据key，查询value
+	 * 是否拥有该权限
+	 * @param permission  权限标识
+	 * @return   true：是     false：否
 	 */
-	SysConfigEntity queryByKey(String paramKey);
+	public boolean hasPermission(String permission) {
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && subject.isPermitted(permission);
+	}
 
-	/**
-	 * 根据key，更新value
-	 */
-	int updateValueByKey(@Param("paramKey") String paramKey, @Param("paramValue") String paramValue);
-	
 }

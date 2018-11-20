@@ -6,7 +6,7 @@ package org.cboard.dto;
  */
 public class User  {
 
-    private String userId;
+    private Long userId;
     private String company;
     private String department;
     private String name;
@@ -36,11 +36,11 @@ public class User  {
         this.department = department;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

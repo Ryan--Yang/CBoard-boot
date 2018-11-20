@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>CBoard | Starter</title>
+  <title>CBoard</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="${request.contextPath}/statics/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
   <link rel="stylesheet" href="${request.contextPath}/statics/css/font-awesome.min.css">
-  <link rel="stylesheet" href="${request.contextPath}/statics/css/ionicons.min.css">
-  <link rel="stylesheet" href="${request.contextPath}/statics/dist/css/AdminLTE.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="${request.contextPath}/statics/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
 
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/main.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -21,73 +22,98 @@
   <![endif]-->
 </head>
 <body class="hold-transition login-page">
-<div class="login-box">
+<div class="login-box" id="rrapp" v-cloak>
   <div class="login-logo">
-    <span><b>CB</b></span><span>oard</span>
+    <b>CBoard</b>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">Sign in to start your session</p>
-
-    <form action="login" method="post">
+      <p class="login-box-msg">登录</p>
+      <div v-if="error" class="alert alert-danger alert-dismissible">
+        <h4 style="margin-bottom: 0px;"><i class="fa fa-exclamation-triangle"></i> {{errorMsg}}</h4>
+      </div>
       <div class="form-group has-feedback">
-        <input type="text" class="form-control" placeholder="UserName" name="username">
+        <input type="text" class="form-control" v-model="username" placeholder="账号">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password" name="password">
+        <input type="password" class="form-control" v-model="password" placeholder="密码">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
+      <!--<div class="form-group has-feedback">
+        <input type="text" class="form-control" v-model="captcha" @keyup.enter="login" placeholder="验证码">
+        <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <img alt="如果看不清楚，请单击图片刷新！" class="pointer" :src="src" @click="refreshCode">
+        &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" @click="refreshCode">点击刷新</a>
+      </div>-->
+      
+      
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">
-            <label>
-              <input type="checkbox" name="remember_me" value="true"> Remember Me
-            </label>
           </div>
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">
-            Sign In
-          </button>
+          <button type="button" class="btn btn-primary btn-block btn-flat" @click="login">登录</button>
         </div>
         <!-- /.col -->
       </div>
-    </form>
+    <!-- /.social-auth-links -->
 
-    <!--
-        <div class="social-auth-links text-center">
-          <p>- OR -</p>
-          <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
-            Facebook</a>
-          <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
-            Google+</a>
-        </div>
-    /.social-auth-links -->
-    <!--
-    <a href="#">I forgot my password</a><br>
-    <a href="#" class="text-center">Register a new membership</a>
-    -->
   </div>
   <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
-
-<!-- jQuery 2.2.3 -->
-<script src="${request.contextPath}/statics/plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="${request.contextPath}/statics/bootstrap/js/bootstrap.min.js"></script>
-<!-- iCheck -->
-<script src="${request.contextPath}/statics/plugins/iCheck/icheck.min.js"></script>
-<script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' // optional
-    });
-  });
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
+<script src="${request.contextPath}/statics/libs/jquery.slimscroll.min.js"></script>
+<script src="${request.contextPath}/statics/libs/fastclick.min.js"></script>
+<script src="${request.contextPath}/statics/libs/app.js"></script>
+<script type="text/javascript">
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		username: '',
+		password: '',
+		//captcha: '',
+		error: false,
+		errorMsg: '',
+		//src: 'captcha.jpg'
+	},
+	beforeCreate: function(){
+		if(self != top){
+			top.location.href = self.location.href;
+		}
+	},
+	methods: {
+		/*refreshCode: function(){
+			this.src = "captcha.jpg?t=" + $.now();
+		},*/
+		login: function (event) {
+			var data = "username="+vm.username+"&password="+vm.password;
+			$.ajax({
+				type: "POST",
+			    url: "sys/login",
+			    data: data,
+			    dataType: "json",
+			    success: function(result){
+					if(result.code == 0){//登录成功
+						parent.location.href ='starter.html';
+					}else{
+						vm.error = true;
+						vm.errorMsg = result.msg;
+						
+						//vm.refreshCode();
+					}
+				}
+			});
+		}
+	}
+});
 </script>
 </body>
 </html>

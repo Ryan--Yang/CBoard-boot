@@ -14,21 +14,33 @@
  * the License.
  */
 
-package io.renren.modules.sys.dao;
+package io.renren.common.annotation;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.renren.modules.sys.entity.SysCaptchaEntity;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
+import java.lang.annotation.*;
 
 /**
- * 验证码
+ * 数据过滤
  *
  * @author Mark sunlightcs@gmail.com
- * @since 3.1.0 2018-02-10
+ * @since 3.0.0 2017-09-17
  */
-@Mapper
-@Repository
-public interface SysCaptchaDao extends BaseMapper<SysCaptchaEntity> {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface DataFilter {
+    /**  表的别名 */
+    String tableAlias() default "";
 
+    /**  true：没有本部门数据权限，也能查询本人数据 */
+    boolean user() default true;
+
+    /**  true：拥有子部门数据权限 */
+    boolean subDept() default false;
+
+    /**  部门ID */
+    String deptId() default "dept_id";
+
+    /**  用户ID */
+    String userId() default "user_id";
 }
+

@@ -34,7 +34,7 @@ public class UpdateController extends BaseController {
 
     @RequestMapping(value = "/dataset")
     public String dataset() {
-        String userId = tlUser.get().getUserId();
+        Long userId = tlUser.get().getUserId();
         if (!adminUserId.equals(userId)) {
             return "";
         }
@@ -48,7 +48,7 @@ public class UpdateController extends BaseController {
         };
 
         datasetList.forEach(dataset -> {
-            JSONObject jsonObject = JSONObject.parseObject(dataset.getData());
+            JSONObject jsonObject = JSONObject.parseObject(dataset.getDataJson());
             JSONObject schema = jsonObject.getJSONObject("schema");
             if (schema != null) {
                 schema.getJSONArray("measure").forEach(addId);
@@ -66,7 +66,7 @@ public class UpdateController extends BaseController {
             if (jsonObject.containsKey("expressions")) {
                 jsonObject.getJSONArray("expressions").forEach(addId);
             }
-            dataset.setData(jsonObject.toJSONString());
+            dataset.setDataJson(jsonObject.toJSONString());
             datasetDao.update(dataset);
         });
         return "1";
@@ -74,17 +74,17 @@ public class UpdateController extends BaseController {
 
     @RequestMapping(value = "/widget")
     public String widget() {
-        String userId = tlUser.get().getUserId();
+        Long userId = tlUser.get().getUserId();
         if (!adminUserId.equals(userId)) {
             return "";
         }
         List<DashboardWidget> widgetList = widgetDao.getWidgetList(userId);
         widgetList.forEach(widget -> {
-            Long datasetId = JSONObject.parseObject(widget.getData()).getLong("datasetId");
+            Long datasetId = JSONObject.parseObject(widget.getDataJson()).getLong("datasetId");
             DashboardDataset dataset = datasetDao.getDataset(datasetId);
             if (dataset != null) {
-                JSONObject _dataset = JSONObject.parseObject(dataset.getData());
-                JSONObject data = JSONObject.parseObject(widget.getData());
+                JSONObject _dataset = JSONObject.parseObject(dataset.getDataJson());
+                JSONObject data = JSONObject.parseObject(widget.getDataJson());
                 JSONObject config = data.getJSONObject("config");
                 if (config.containsKey("keys")) {
                     config.getJSONArray("keys").forEach(k -> addDimensionId(_dataset, k));
@@ -101,7 +101,7 @@ public class UpdateController extends BaseController {
                 if (config.containsKey("filters")) {
                     config.getJSONArray("filters").forEach(f -> addFilterGroupId(_dataset, f));
                 }
-                widget.setData(data.toJSONString());
+                widget.setDataJson(data.toJSONString());
                 widgetDao.update(widget);
             }
         });

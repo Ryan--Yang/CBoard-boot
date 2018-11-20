@@ -18,23 +18,23 @@ public interface CBoardDao {
 
     int save(DashboardBoard board);
 
-    List<DashboardBoard> getBoardList(String userId);
+    List<DashboardBoard> getBoardList(Long userId);
 
-    List<DashboardBoard> getBoardListAdmin(String userId);
+    List<DashboardBoard> getBoardListAdmin(Long userId);
 
     long countExistBoardName(Map<String, Object> map);
 
     int update(DashboardBoard board);
 
-    int delete(Long id, String userId);
+    int delete(Long boardId, Long userId);
 
-    DashboardBoard getBoard(Long id);
+    DashboardBoard getBoard(Long boardId);
 
-    long checkBoardRole(String userId, Long boardId, String permissionPattern);
+    long checkBoardRole(Long userId, Long boardId, String permissionPattern);
 
-    DashboardBoardParam getBoardParam(Long boardId, String userId);
+    DashboardBoardParam getBoardParam(Long boardId, Long userId);
 
     int saveBoardParam(DashboardBoardParam boardParam);
 
-    int deleteBoardParam(Long boardId, String userId);
+    int deleteBoardParam(Long boardId, Long userId);
 }

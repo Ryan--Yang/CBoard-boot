@@ -37,7 +37,7 @@ public class CommonsController extends BaseController {
         //return authenticationService.getCurrentUser();
         User user = new User();
         user.setName("admin");
-        user.setUserId("1");
+        user.setUserId((long) 1);
         return user;
     }
 

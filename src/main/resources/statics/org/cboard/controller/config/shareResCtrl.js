@@ -8,7 +8,7 @@ cBoard.controller('shareResCtrl', function ($scope, $http, ModalUtils, $filter) 
     $scope.userKeyword = '';
 
     var getRoleList = function () {
-        $http.get("admin/getRoleListAll").success(function (response) {
+        $http.get("sys/role/list").success(function (response) {
             $scope.roleList = response;
         });
     };

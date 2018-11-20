@@ -7,10 +7,10 @@ import java.sql.Timestamp;
  */
 public class DashboardDatasource {
 
-    private Long id;
-    private String userId;
-    private String name;
-    private String type;
+    private Long datasourceId;
+    private Long userId;
+    private String sourceName;
+    private String sourceType;
     private String config;
     private String permission;
     private String userName;
@@ -26,36 +26,36 @@ public class DashboardDatasource {
         this.permission = permission;
     }
 
-    public Long getId() {
-        return id;
+    public Long getDatasourceId() {
+        return datasourceId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDatasourceId(Long datasourceId) {
+        this.datasourceId = datasourceId;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getSourceName() {
+        return sourceName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
     }
 
-    public String getType() {
-        return type;
+    public String getSourceType() {
+        return sourceType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
     }
 
     public String getConfig() {

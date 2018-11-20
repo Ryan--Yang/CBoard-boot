@@ -14,7 +14,7 @@ import java.util.Map;
 public class ViewDashboardWidget {
 
     private Long id;
-    private String userId;
+    private Long userId;
     private String name;
     private String categoryName;
     private String userName;
@@ -34,15 +34,15 @@ public class ViewDashboardWidget {
     };
 
     public ViewDashboardWidget(DashboardWidget widget) {
-        this.id = widget.getId();
+        this.id = widget.getWidgetId();
         this.userId = widget.getUserId();
-        this.name = widget.getName();
+        this.name = widget.getWidgetName();
         this.categoryName = widget.getCategoryName();
         this.userName = widget.getUserName();
         this.loginName = widget.getLoginName();
         this.createTime = widget.getCreateTime().toString();
         this.updateTime = widget.getUpdateTime().toString();
-        this.data = JSONObject.parseObject(widget.getData());
+        this.data = JSONObject.parseObject(widget.getDataJson());
         this.edit = RolePermission.isEdit(widget.getPermission());
         this.delete = RolePermission.isDelete(widget.getPermission());
     }
@@ -71,11 +71,11 @@ public class ViewDashboardWidget {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

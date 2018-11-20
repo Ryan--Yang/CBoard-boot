@@ -34,7 +34,7 @@ public class PersistService {
 
     private static final ConcurrentMap<String, PersistContext> TASK_MAP = new ConcurrentHashMap<>();
 
-    public PersistContext persist(Long dashboardId, String userId) {
+    public PersistContext persist(Long dashboardId, Long userId) {
         String persistId = UUID.randomUUID().toString().replaceAll("-", "");
         Process process = null;
         try {

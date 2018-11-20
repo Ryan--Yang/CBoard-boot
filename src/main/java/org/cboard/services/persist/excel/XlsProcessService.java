@@ -65,7 +65,7 @@ public class XlsProcessService {
 
     private XlsProcesserContext dashboardToXls(PersistContext persistContext, XlsProcesserContext context) {
         DashboardBoard board = CBoardDao.getBoard(persistContext.getDashboardId());
-        JSONArray rows = JSONObject.parseObject(board.getLayout()).getJSONArray("rows");
+        JSONArray rows = JSONObject.parseObject(board.getLayoutJson()).getJSONArray("rows");
         List<JSONArray> widgetRows = rows.stream().map(row -> (JSONObject) row)
                 .filter(row -> row.getString("type") == null || "widget".equals(row.getString("type")))
                 .map(row -> {
@@ -115,7 +115,7 @@ public class XlsProcessService {
         int widthInRow;
 
         if (tables != widgets) {
-            Sheet sheet = context.getWb().createSheet(board.getName());
+            Sheet sheet = context.getWb().createSheet(board.getBoardName());
             sheet.setDisplayGridlines(false);
             IntStream.range(0, 180).forEach(i -> sheet.setColumnWidth(i, 365));
             context.setBoardSheet(sheet);
@@ -158,7 +158,7 @@ public class XlsProcessService {
             return context;
         }
         dRow = 0;
-        Sheet dataSheet = context.getWb().createSheet(board.getName() + "_table");
+        Sheet dataSheet = context.getWb().createSheet(board.getBoardName() + "_table");
         context.setBoardSheet(dataSheet);
         for (JSONArray rw : widgetRows) {
             for (int i = 0; i < rw.size(); i++) {

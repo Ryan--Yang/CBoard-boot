@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class ViewDashboardDataset {
     private Long id;
-    private String userId;
+    private Long userId;
     private String name;
     private String categoryName;
     private String userName;
@@ -35,15 +35,15 @@ public class ViewDashboardDataset {
     };
 
     public ViewDashboardDataset(DashboardDataset dataset) {
-        this.id = dataset.getId();
+        this.id = dataset.getDatasetId();
         this.userId = dataset.getUserId();
-        this.name = dataset.getName();
+        this.name = dataset.getDatasetName();
         this.userName = dataset.getUserName();
         this.categoryName = dataset.getCategoryName();
         this.loginName = dataset.getLoginName();
         this.createTime = dataset.getCreateTime().toString();
         this.updateTime = dataset.getUpdateTime().toString();
-        this.data = JSONObject.parseObject(dataset.getData());
+        this.data = JSONObject.parseObject(dataset.getDataJson());
         this.edit = RolePermission.isEdit(dataset.getPermission());
         this.delete = RolePermission.isDelete(dataset.getPermission());
     }
@@ -72,11 +72,11 @@ public class ViewDashboardDataset {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

@@ -17,9 +17,9 @@ public interface JobDao {
 
     int update(DashboardJob job);
 
-    List<DashboardJob> getJobList(String userId);
+    List<DashboardJob> getJobList(Long userId);
 
-    List<DashboardJob> getJobListAdmin(String userId);
+    List<DashboardJob> getJobListAdmin(Long userId);
 
     int delete(Long jobId);
 
@@ -29,6 +29,6 @@ public interface JobDao {
 
     DashboardJob getJob(Long jobId);
 
-    long checkJobRole(String userId, Long jobId, String permissionPattern);
+    long checkJobRole(Long userId, Long jobId);
 
 }

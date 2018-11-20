@@ -7,11 +7,11 @@ import java.sql.Timestamp;
  */
 public class DashboardBoard {
 
-    private Long id;
-    private String userId;
+    private Long boardId;
+    private Long userId;
     private Long categoryId;
-    private String name;
-    private String layout;
+    private String boardName;
+    private String layoutJson;
     private String categoryName;
     private String userName;
     private String loginName;
@@ -28,36 +28,36 @@ public class DashboardBoard {
         this.permission = permission;
     }
 
-    public Long getId() {
-        return id;
+    public Long getBoardId() {
+        return boardId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getBoardName() {
+        return boardName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBoardName(String boardName) {
+        this.boardName = boardName;
     }
 
-    public String getLayout() {
-        return layout;
+    public String getLayoutJson() {
+        return layoutJson;
     }
 
-    public void setLayout(String layout) {
-        this.layout = layout;
+    public void setLayoutJson(String layoutJson) {
+        this.layoutJson = layoutJson;
     }
 
     public Long getCategoryId() {

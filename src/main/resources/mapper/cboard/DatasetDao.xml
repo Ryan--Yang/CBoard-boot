@@ -8,78 +8,74 @@
 
     <select id="getAllDatasetList" resultType="org.cboard.pojo.DashboardDataset">
         SELECT
-        dataset_id    AS id,
+        dataset_id    AS datasetId,
         s.user_id     AS userId,
-        dataset_name  AS name,
-        data_json     AS data,
+        dataset_name  AS datasetName,
+        data_json     AS dataJson,
         category_name AS categoryName,
-        u.user_name   AS userName,
-        u.login_name  AS loginName,
-        create_time   AS createTime,
-        update_time   AS updateTime
+        u.username   AS userName,
+        s.create_time   AS createTime,
+        s.update_time   AS updateTime
         FROM dashboard_dataset s
-        LEFT JOIN dashboard_user u ON u.user_id = s.user_id
+        LEFT JOIN sys_user u ON u.user_id = s.user_id
     </select>
 
     <select id="getDatasetList" resultType="org.cboard.pojo.DashboardDataset">
       SELECT
-              dataset_id    AS id,
+              dataset_id    AS datasetId,
               s.user_id     AS userId,
-              dataset_name  AS name,
-              data_json     AS data,
+              dataset_name  AS datasetName,
+              data_json     AS dataJson,
               category_name AS categoryName,
-              u.user_name   AS userName,
-              u.login_name  AS loginName,
-              create_time   AS createTime,
-              update_time   AS updateTime
+              u.username   AS userName,
+              s.create_time   AS createTime,
+              s.update_time   AS updateTime
          FROM dashboard_dataset s
-         LEFT JOIN dashboard_user u ON u.user_id = s.user_id
-               WHERE #{userId} = '1' OR s.user_id = #{userId} OR dataset_id IN (
-             SELECT res_id
-               FROM dashboard_user_role ur
-               LEFT JOIN dashboard_role_res rr ON ur.role_id = rr.role_id
-              WHERE ur.user_id = #{userId} AND rr.res_type = 'dataset'
+         LEFT JOIN sys_user u ON u.user_id = s.user_id
+               WHERE #{userId} = '1' AND s.user_id = #{userId} AND dataset_id IN (
+             SELECT dataset_id
+               FROM sys_user_role ur
+               LEFT JOIN sys_role_dataset rd ON ur.role_id = rd.role_id
+              WHERE ur.user_id = #{userId}
           )
         ORDER BY dataset_name
     </select>
 
     <select id="getDatasetListAdmin" resultType="org.cboard.pojo.DashboardDataset">
         SELECT
-              dataset_id    AS id,
+              dataset_id    AS datasetId,
               s.user_id     AS userId,
-              dataset_name  AS name,
-              data_json     AS data,
+              dataset_name  AS datasetName,
+              data_json     AS dataJson,
               category_name AS categoryName,
               u.user_name   AS userName,
-              u.login_name  AS loginName,
-              create_time   AS createTime,
-              update_time   AS updateTime
+              s.create_time   AS createTime,
+              s.update_time   AS updateTime
         FROM dashboard_dataset s
-        LEFT JOIN dashboard_user u ON u.user_id = s.user_id
-        WHERE #{userId} = '1' OR s.user_id = #{userId}
-           OR s.user_id = #{userId}
-           OR dataset_id IN (
-              SELECT res_id
-                FROM dashboard_role r
-                LEFT JOIN dashboard_role_res rr ON r.role_id = rr.role_id
-               WHERE r.user_id = #{userId} AND rr.res_type = 'dataset'
+        LEFT JOIN sys_user u ON u.user_id = s.user_id
+        WHERE #{userId} = '1' AND s.user_id = #{userId}
+           AND dataset_id IN (
+              SELECT dataset_id
+               FROM sys_user_role ur
+               LEFT JOIN sys_role_dataset rd ON ur.role_id = rd.role_id
+              WHERE ur.user_id = #{userId}
            )
         ORDER BY dataset_name
     </select>
 
     <select id="getDataset" resultType="org.cboard.pojo.DashboardDataset">
-       SELECT dataset_id id,user_id userId,dataset_name name,data_json data,category_name categoryName,create_time createTime,update_time updateTime FROM dashboard_dataset WHERE dataset_id = #{id}
+       SELECT dataset_id datasetId,user_id userId,dataset_name datasetName,data_json dataJson,category_name categoryName,create_time createTime,update_time updateTime FROM dashboard_dataset WHERE dataset_id = #{datasetId}
     </select>
 
     <insert id="save" parameterType="org.cboard.pojo.DashboardDataset">
         <![CDATA[
-        INSERT INTO dashboard_dataset(user_id,dataset_name,data_json,category_name) VALUES (#{userId},#{name},#{data},#{categoryName})
+        INSERT INTO dashboard_dataset(user_id,dataset_name,data_json,category_name) VALUES (#{userId},#{datasetName},#{dataJson},#{categoryName})
         ]]>
     </insert>
 
     <update id="update" parameterType="org.cboard.pojo.DashboardDataset">
         <![CDATA[
-        UPDATE dashboard_dataset SET dataset_name = #{name},data_json = #{data},category_name = #{categoryName}, update_time = #{updateTime} where dataset_id = #{id}
+        UPDATE dashboard_dataset SET dataset_name = #{datasetName},data_json = #{dataJson},category_name = #{categoryName}, update_time = #{updateTime} where dataset_id = #{datasetId}
         ]]>
     </update>
 
@@ -89,18 +85,22 @@
          WHERE 1=1
         <if test="dataset_id != null" >
           <![CDATA[
-            AND dataset_id <> #{dataset_id}
+            AND dataset_id <> #{datasetId}
           ]]>
         </if>
-            AND dataset_name = #{dataset_name}
-            AND category_name = #{category_name}
+            AND dataset_name = #{datasetName}
+            AND category_name = #{categoryName}
     </select>
 
     <delete id="delete">
-        delete from dashboard_dataset where dataset_id = #{id}
+        delete from dashboard_dataset where dataset_id = #{datasetId}
     </delete>
 
     <select id="checkDatasetRole" resultType="java.lang.Long">
-        SELECT count(1) FROM dashboard_dataset WHERE dataset_id = #{datasetId} and (#{userId} = '1' OR user_id = #{userId} OR dataset_id IN (SELECT res_id FROM dashboard_user_role ur LEFT JOIN dashboard_role_res rr ON ur.role_id = rr.role_id WHERE ur.user_id = #{userId} AND rr.res_type = 'dataset' AND rr.permission LIKE #{permissionPattern}))
+        SELECT count(1) FROM dashboard_dataset WHERE dataset_id = #{datasetId} and (#{userId} = '1' and user_id = #{userId}
+        and dataset_id IN (SELECT dataset_id
+               FROM sys_user_role ur
+               LEFT JOIN sys_role_dataset rd ON ur.role_id = rd.role_id
+              WHERE ur.user_id = #{userId}))
     </select>
 </mapper>

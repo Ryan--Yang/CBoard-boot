@@ -22,18 +22,18 @@ public class DatasetService {
     @Autowired
     private DatasetDao datasetDao;
 
-    public ServiceStatus save(String userId, String json) {
+    public ServiceStatus save(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardDataset dataset = new DashboardDataset();
         dataset.setUserId(userId);
-        dataset.setName(jsonObject.getString("name"));
-        dataset.setData(jsonObject.getString("data"));
+        dataset.setDatasetName(jsonObject.getString("name"));
+        dataset.setDataJson(jsonObject.getString("data"));
         dataset.setCategoryName(jsonObject.getString("categoryName"));
         if (StringUtils.isEmpty(dataset.getCategoryName())) {
             dataset.setCategoryName("默认分类");
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("dataset_name", dataset.getName());
+        paramMap.put("dataset_name", dataset.getDatasetName());
         paramMap.put("user_id", dataset.getUserId());
         paramMap.put("category_name", dataset.getCategoryName());
         if (datasetDao.countExistDatasetName(paramMap) <= 0) {
@@ -44,23 +44,23 @@ public class DatasetService {
         }
     }
 
-    public ServiceStatus update(String userId, String json) {
+    public ServiceStatus update(Long userId, String json) {
         System.out.println("json: " + json);
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardDataset dataset = new DashboardDataset();
         dataset.setUserId(userId);
-        dataset.setId(jsonObject.getLong("id"));
-        dataset.setName(jsonObject.getString("name"));
+        dataset.setDatasetId(jsonObject.getLong("id"));
+        dataset.setDatasetName(jsonObject.getString("name"));
         dataset.setCategoryName(jsonObject.getString("categoryName"));
-        dataset.setData(jsonObject.getString("data"));
+        dataset.setDataJson(jsonObject.getString("data"));
         dataset.setUpdateTime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         if (StringUtils.isEmpty(dataset.getCategoryName())) {
             dataset.setCategoryName("默认分类");
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("dataset_name", dataset.getName());
+        paramMap.put("dataset_name", dataset.getDatasetName());
         paramMap.put("user_id", dataset.getUserId());
-        paramMap.put("dataset_id", dataset.getId());
+        paramMap.put("dataset_id", dataset.getDatasetId());
         paramMap.put("category_name", dataset.getCategoryName());
         if (datasetDao.countExistDatasetName(paramMap) <= 0) {
             datasetDao.update(dataset);
@@ -70,8 +70,8 @@ public class DatasetService {
         }
     }
 
-    public ServiceStatus delete(String userId, Long id) {
-        datasetDao.delete(id, userId);
+    public ServiceStatus delete(Long userId, Long datasetId) {
+        datasetDao.delete(userId, datasetId);
         return new ServiceStatus(ServiceStatus.Status.Success, "success");
     }
 

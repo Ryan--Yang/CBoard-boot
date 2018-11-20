@@ -108,6 +108,8 @@ public class JdbcDataProvider extends DataProvider implements Aggregatable, Init
 
         if(page != null && limit != null){
             resultSql = sql + " limit " + (page-1)*limit + ", " + limit;
+        }else if(limit != null){
+            resultSql = sql + " limit " + limit;
         }else {
             resultSql = sql;
         }

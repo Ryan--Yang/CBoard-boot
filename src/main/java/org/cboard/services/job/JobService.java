@@ -38,7 +38,7 @@ public class JobService implements InitializingBean {
     private JobDao jobDao;
 
     @Value("${admin_user_id}")
-    private String adminUserId;
+    private Long adminUserId;
 
     @Autowired
     private MailService mailService;
@@ -62,7 +62,7 @@ public class JobService implements InitializingBean {
                     // Skip expired job
                     continue;
                 }
-                JobDetail jobDetail = JobBuilder.newJob(getJobExecutor(job)).withIdentity(job.getId().toString()).build();
+                JobDetail jobDetail = JobBuilder.newJob(getJobExecutor(job)).withIdentity(job.getJobId().toString()).build();
                 CronTrigger trigger = TriggerBuilder.newTrigger()
                         .startAt(new Date().getTime() < startTimeStamp ? job.getStartDate() : new Date())
                         .withSchedule(CronScheduleBuilder.cronSchedule(job.getCronExp()))
@@ -71,7 +71,7 @@ public class JobService implements InitializingBean {
                 jobDetail.getJobDataMap().put("job", job);
                 scheduler.scheduleJob(jobDetail, trigger);
             } catch (SchedulerException e) {
-                LOG.error("{} Job id: {}", e.getMessage(), job.getId());
+                LOG.error("{} Job id: {}", e.getMessage(), job.getJobId());
             } catch (Exception e) {
                 LOG.error("" , e);
             }
@@ -87,23 +87,23 @@ public class JobService implements InitializingBean {
     }
 
     protected void sendMail(DashboardJob job) {
-        jobDao.updateLastExecTime(job.getId(), new Date());
+        jobDao.updateLastExecTime(job.getJobId(), new Date());
         try {
-            jobDao.updateStatus(job.getId(), ViewDashboardJob.STATUS_PROCESSING, "");
+            jobDao.updateStatus(job.getJobId(), ViewDashboardJob.STATUS_PROCESSING, "");
             mailService.sendDashboard(job);
-            jobDao.updateStatus(job.getId(), ViewDashboardJob.STATUS_FINISH, "");
+            jobDao.updateStatus(job.getJobId(), ViewDashboardJob.STATUS_FINISH, "");
         } catch (Exception e) {
             LOG.error("" , e);
-            jobDao.updateStatus(job.getId(), ViewDashboardJob.STATUS_FAIL, ExceptionUtils.getStackTrace(e));
+            jobDao.updateStatus(job.getJobId(), ViewDashboardJob.STATUS_FAIL, ExceptionUtils.getStackTrace(e));
         }
     }
 
-    public ServiceStatus save(String userId, String json) {
+    public ServiceStatus save(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardJob job = new DashboardJob();
         job.setUserId(userId);
-        job.setName(jsonObject.getString("name"));
-        job.setConfig(jsonObject.getString("config"));
+        job.setJobName(jsonObject.getString("name"));
+        job.setJobConfig(jsonObject.getString("config"));
         job.setCronExp(jsonObject.getString("cronExp"));
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -119,12 +119,12 @@ public class JobService implements InitializingBean {
         return new ServiceStatus(ServiceStatus.Status.Success, "success");
     }
 
-    public ServiceStatus update(String userId, String json) {
+    public ServiceStatus update(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardJob job = new DashboardJob();
-        job.setId(jsonObject.getLong("id"));
-        job.setName(jsonObject.getString("name"));
-        job.setConfig(jsonObject.getString("config"));
+        job.setJobId(jsonObject.getLong("id"));
+        job.setJobName(jsonObject.getString("name"));
+        job.setJobConfig(jsonObject.getString("config"));
         job.setCronExp(jsonObject.getString("cronExp"));
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -140,13 +140,13 @@ public class JobService implements InitializingBean {
         return new ServiceStatus(ServiceStatus.Status.Success, "success");
     }
 
-    public ServiceStatus delete(String userId, Long id) {
+    public ServiceStatus delete(Long userId, Long id) {
         jobDao.delete(id);
         configScheduler();
         return new ServiceStatus(ServiceStatus.Status.Success, "success");
     }
 
-    public ServiceStatus exec(String userId, Long id) {
+    public ServiceStatus exec(Long userId, Long id) {
         DashboardJob job = jobDao.getJob(id);
         new Thread(() ->
                 sendMail(job)
@@ -159,11 +159,11 @@ public class JobService implements InitializingBean {
        // configScheduler();
     }
 
-    public String getAdminUserId() {
+    public Long getAdminUserId() {
         return adminUserId;
     }
 
-    public void setAdminUserId(String adminUserId) {
+    public void setAdminUserId(Long adminUserId) {
         this.adminUserId = adminUserId;
     }
 }

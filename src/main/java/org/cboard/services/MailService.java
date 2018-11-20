@@ -69,7 +69,7 @@ public class MailService {
     }
 
     public String sendDashboard(DashboardJob job) throws Exception {
-        JSONObject config = JSONObject.parseObject(job.getConfig());
+        JSONObject config = JSONObject.parseObject(job.getJobConfig());
 
         List<PersistContext> persistContextList = config.getJSONArray("boards").stream()
                 .map(e -> persistService.persist(((JSONObject) e).getLong("id"), job.getUserId()))
