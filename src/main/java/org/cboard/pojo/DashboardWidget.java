@@ -7,13 +7,13 @@ import java.sql.Timestamp;
  */
 public class DashboardWidget {
 
-    private Long id;
-    private String userId;
-    private String name;
+    private Long widgetId;
+    private Long userId;
+    private String widgetName;
     private String categoryName;
     private String userName;
     private String loginName;
-    private String data;
+    private String dataJson;
     private String permission;
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -26,36 +26,36 @@ public class DashboardWidget {
         this.permission = permission;
     }
 
-    public Long getId() {
-        return id;
+    public Long getWidgetId() {
+        return widgetId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setWidgetId(Long widgetId) {
+        this.widgetId = widgetId;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getWidgetName() {
+        return widgetName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setWidgetName(String widgetName) {
+        this.widgetName = widgetName;
     }
 
-    public String getData() {
-        return data;
+    public String getDataJson() {
+        return dataJson;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataJson(String dataJson) {
+        this.dataJson = dataJson;
     }
 
     public String getCategoryName() {

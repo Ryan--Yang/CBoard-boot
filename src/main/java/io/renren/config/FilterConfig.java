@@ -4,6 +4,7 @@ import io.renren.common.xss.XssFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.DispatcherType;
 
@@ -17,7 +18,7 @@ import javax.servlet.DispatcherType;
 @Configuration
 public class FilterConfig {
 
-   /* @Bean
+    @Bean
     public FilterRegistrationBean shiroFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new DelegatingFilterProxy("shiroFilter"));
@@ -25,9 +26,9 @@ public class FilterConfig {
         registration.addInitParameter("targetFilterLifecycle", "true");
         registration.setEnabled(true);
         registration.setOrder(Integer.MAX_VALUE - 1);
-        registration.addUrlPatterns("*//*");
+        registration.addUrlPatterns("/*");
         return registration;
-    }*/
+    }
 
     @Bean
     public FilterRegistrationBean xssFilterRegistration() {

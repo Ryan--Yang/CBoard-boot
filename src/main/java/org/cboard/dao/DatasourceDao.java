@@ -15,11 +15,11 @@ import java.util.Map;
 @Repository
 public interface DatasourceDao {
 
-    String getDatasourceConfig(String userId, String name);
+    String getDatasourceConfig(Long userId, Long datasourceId);
 
-    List<DashboardDatasource> getDatasourceList(String userId);
+    List<DashboardDatasource> getDatasourceList(Long userId);
 
-    List<DashboardDatasource> getDatasourceListAdmin(String userId);
+    List<DashboardDatasource> getDatasourceListAdmin(Long userId);
 
     DashboardDatasource getDatasource(Long datasourceId);
 
@@ -29,7 +29,7 @@ public interface DatasourceDao {
 
     int update(DashboardDatasource dashboardDatasource);
 
-    int delete(Long id, String userId);
+    int delete(Long datasourceId, Long userId);
 
-    long checkDatasourceRole(String userId, Long datasourceId, String permissionPattern);
+    long checkDatasourceRole(Long userId, Long datasourceId);
 }

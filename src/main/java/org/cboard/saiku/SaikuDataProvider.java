@@ -112,4 +112,9 @@ public class SaikuDataProvider extends DataProvider {
 
         return result;
     }
+
+    @Override
+    public String[][] getDatasetData(Integer page, Integer limit) throws Exception{
+        return null;
+    }
 }

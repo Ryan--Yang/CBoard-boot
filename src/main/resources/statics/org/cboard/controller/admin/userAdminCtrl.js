@@ -16,21 +16,21 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     });
 
     var getUserList = function () {
-        $http.get("admin/getUserList").success(function (response) {
+        $http.get("sys/user/list").success(function (response) {
             $scope.userList = response;
         });
     };
     getUserList();
 
     var getRoleList = function () {
-        $http.get("admin/getRoleList").success(function (response) {
+        $http.get("sys/role/list").success(function (response) {
             $scope.roleList = response;
         });
     };
     getRoleList();
 
     var getUserRoleList = function () {
-        $http.get("admin/getUserRoleList").success(function (response) {
+        $http.get("sys/role/list").success(function (response) {
             $scope.userRoleList = response;
         });
     };
@@ -79,7 +79,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     }];
 
     var getBoardList = function () {
-        return $http.get("admin/getBoardList").success(function (response) {
+        return $http.get("dashboard/getBoardList").success(function (response) {
             _.each(buildNodeByCategory(_.filter(response, function (e) {
                 return e.categoryId;
             }), 'Dashboard', 'board', 'fa fa-puzzle-piece'), function (e) {
@@ -89,7 +89,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     };
 
     var getMenuList = function () {
-        return $http.get("admin/getMenuList").success(function (response) {
+        return $http.get("dashboard/getMenuList").success(function (response) {
             $scope.menuList = response;
             _.each(response, function (e) {
                 $scope.tree.menu.resList.push({
@@ -104,7 +104,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     };
 
     var getDatasourceList = function () {
-        return $http.get("admin/getDatasourceList").success(function (response) {
+        return $http.get("dashboard/getDatasourceList").success(function (response) {
             _.each(buildNodeByCategory(response, 'Datasource', 'datasource', 'fa fa-database'), function (e) {
                 $scope.tree.datasource.resList.push(e);
             });
@@ -112,7 +112,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     };
 
     var getDatasetList = function () {
-        return $http.get("admin/getDatasetList").success(function (response) {
+        return $http.get("dashboard/getDatasetList").success(function (response) {
             _.each(buildNodeByCategory(response, 'Dataset', 'dataset', 'fa fa-table'), function (e) {
                 $scope.tree.dataset.resList.push(e);
             });
@@ -120,7 +120,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     };
 
     var getWidgetList = function () {
-        return $http.get("admin/getWidgetList").success(function (response) {
+        return $http.get("dashboard/getWidgetList").success(function (response) {
             _.each(buildNodeByCategory(response, 'Widget', 'widget', 'fa fa-line-chart'), function (e) {
                 $scope.tree.widget.resList.push(e);
             });
@@ -128,7 +128,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     };
 
     var getJobList = function () {
-        return $http.get("admin/getJobList").success(function (response) {
+        return $http.get("dashboard/getJobList").success(function (response) {
             _.each(buildNodeByCategory(response, 'Job', 'job', 'fa fa-clock-o'), function (e) {
                 $scope.tree.job.resList.push(e);
             });
@@ -296,7 +296,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
 
 
     var getRoleResList = function () {
-        $http.get("admin/getRoleResList").success(function (response) {
+        $http.get("dashboard/getRoleResList").success(function (response) {
             $scope.roleResList = response;
         });
     };
@@ -367,7 +367,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
         //     return;
         // }
         if ($scope.optFlag == 'newUser') {
-            $http.post("admin/saveNewUser", {user: angular.toJson($scope.curUser)}).success(function (serviceStatus) {
+            $http.post("sys/user/save", {user: angular.toJson($scope.curUser)}).success(function (serviceStatus) {
                 if (serviceStatus == '1') {
                     $scope.optFlag = 'none';
                     getUserList();
@@ -378,7 +378,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
                 }
             });
         } else {
-            $http.post("admin/updateUser", {user: angular.toJson($scope.curUser)}).success(function (serviceStatus) {
+            $http.post("sys/user/update", {user: angular.toJson($scope.curUser)}).success(function (serviceStatus) {
                 if (serviceStatus == '1') {
                     $scope.optFlag = 'none';
                     getUserList();
@@ -397,7 +397,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
         //     return;
         // }
         if ($scope.optFlag == 'newRole') {
-            $http.post("admin/saveRole", {role: angular.toJson($scope.curRole)}).success(function (serviceStatus) {
+            $http.post("sys/role/save", {role: angular.toJson($scope.curRole)}).success(function (serviceStatus) {
                 if (serviceStatus == '1') {
                     $scope.optFlag = 'none';
                     getRoleList();
@@ -408,7 +408,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
                 }
             });
         } else {
-            $http.post("admin/updateRole", {role: angular.toJson($scope.curRole)}).success(function (serviceStatus) {
+            $http.post("sys/role/update", {role: angular.toJson($scope.curRole)}).success(function (serviceStatus) {
                 if (serviceStatus == '1') {
                     $scope.optFlag = 'none';
                     getRoleList();
@@ -544,7 +544,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
 
     $scope.deleteRole = function () {
         ModalUtils.confirm(translate("COMMON.CONFIRM_DELETE"), "modal-info", "lg", function () {
-            $http.post("admin/deleteRole", {
+            $http.post("sys/role/delete", {
                 roleId: $scope.selectRole[0].roleId
             }).success(function (serviceStatus) {
                 if (serviceStatus == '1') {
@@ -562,7 +562,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
 
     $scope.deleteUser = function () {
         ModalUtils.confirm(translate("COMMON.CONFIRM_DELETE"), "modal-info", "lg", function () {
-            $http.post("admin/deleteUser", {
+            $http.post("sys/user/delete", {
                 userId: $scope.selectUser[0].userId
             }).success(function (serviceStatus) {
                 if (serviceStatus == '1') {

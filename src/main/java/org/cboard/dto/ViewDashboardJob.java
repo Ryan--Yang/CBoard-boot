@@ -19,7 +19,7 @@ public class ViewDashboardJob {
     private Map<String, Object> daterange;
     private String jobType;
     private Map<String, Object> config;
-    private String userId;
+    private Long userId;
     private Date lastExecTime;
     private String userName;
     private Long jobStatus;
@@ -32,15 +32,15 @@ public class ViewDashboardJob {
     public static final Long STATUS_FAIL = 0L;
 
     public ViewDashboardJob(DashboardJob job) {
-        this.id = job.getId();
+        this.id = job.getJobId();
         this.userId = job.getUserId();
-        this.name = job.getName();
+        this.name = job.getJobName();
         this.cronExp = job.getCronExp();
         this.daterange = new HashedMap();
         this.daterange.put("startDate", job.getStartDate());
         this.daterange.put("endDate", job.getEndDate());
         this.jobType = job.getJobType();
-        this.config = JSONObject.parseObject(job.getConfig());
+        this.config = JSONObject.parseObject(job.getJobConfig());
         this.lastExecTime = job.getLastExecTime();
         this.userName = job.getUserName();
         this.jobStatus = job.getJobStatus();
@@ -129,11 +129,11 @@ public class ViewDashboardJob {
         this.config = config;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

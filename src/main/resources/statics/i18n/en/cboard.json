@@ -391,7 +391,7 @@
     "POOLEDCONNECTION": "Pooled Connection",
     "JDBC": {
       "DRIVER": "Driver (eg: com.mysql.jdbc.Driver)",
-      "JDBCURL": "JDBC Url (eg: jdbc:mysql://hostname:port/db)",
+      "JDBCURL": "JDBC Url (eg: jdbc:mysql://hostname:port/db?characterEncoding=utf8&useSSL=true)",
       "USERNAME": "UserName",
       "PASSWORD": "Password",
       "SQLTEXT": "Sql Text"

@@ -4,69 +4,55 @@
 
     <select id="getDatasourceConfig" resultType="java.lang.String">
         <![CDATA[
-        SELECT config FROM dashboard_datasource WHERE datasource_id = #{0}
+        SELECT config FROM dashboard_datasource WHERE datasource_id = #{datasourceId}
         ]]>
     </select>
 
     <select id="getDatasourceList" resultType="org.cboard.pojo.DashboardDatasource">
       SELECT
-              datasource_id AS id,
+              datasource_id AS datasourceId,
               s.user_id     AS userId,
-              source_name   AS name,
-              source_type   AS type,
+              source_name   AS sourceName,
+              source_type   AS sourceType,
               config        AS config,
-              u.user_name   AS userName,
-              u.login_name  AS loginName,
-              create_time   AS createTime,
-              update_time   AS updateTime
+              u.username   AS userName,
+              s.create_time   AS createTime,
+              s.update_time   AS updateTime
          FROM dashboard_datasource s
-         LEFT JOIN dashboard_user u ON u.user_id = s.user_id
-        WHERE #{userId} = '1' OR s.user_id = #{userId} OR datasource_id IN (
-             SELECT res_id
-               FROM dashboard_user_role ur
-               LEFT JOIN dashboard_role_res rr ON ur.role_id = rr.role_id
-              WHERE ur.user_id = #{userId} AND rr.res_type = 'datasource'
-          )
+         LEFT JOIN sys_user u ON u.user_id = s.user_id
+        WHERE #{userId} = '1' OR s.user_id = #{userId}
         ORDER BY source_name
     </select>
 
     <select id="getDatasourceListAdmin" resultType="org.cboard.pojo.DashboardDatasource">
         SELECT
-               datasource_id AS id,
-               s.user_id     AS userId,
-               source_name   AS name,
-               source_type   AS type,
-               config        AS config,
-               u.user_name   AS userName,
-               u.login_name  AS loginName,
-               create_time   AS createTime,
-               update_time   AS updateTime
+               datasource_id AS datasourceId,
+              s.user_id     AS userId,
+              source_name   AS sourceName,
+              source_type   AS sourceType,
+              config        AS config,
+              u.username   AS userName,
+              s.create_time   AS createTime,
+              s.update_time   AS updateTime
          FROM dashboard_datasource s
-         LEFT JOIN dashboard_user u ON u.user_id = s.user_id
-        WHERE #{userId} = '1'
-          OR s.user_id = #{userId}
-          OR datasource_id IN (
-              SELECT res_id
-                FROM dashboard_role r
-                LEFT JOIN dashboard_role_res rr ON r.role_id = rr.role_id
-               WHERE r.user_id = #{userId} AND rr.res_type = 'datasource'
-        )
+         LEFT JOIN sys_user u ON u.user_id = s.user_id
+        WHERE #{userId} = '1' OR s.user_id = #{userId}
         ORDER BY source_name
     </select>
 
     <select id="getDatasource" resultType="org.cboard.pojo.DashboardDatasource">
-        SELECT datasource_id id,user_id userId,source_name name,source_type type ,config,create_time createTime,update_time updateTime FROM dashboard_datasource WHERE datasource_id = #{0}
+        SELECT datasource_id datasourceId,user_id userId,source_name sourceName,source_type sourceType ,config,create_time createTime,update_time updateTime FROM dashboard_datasource WHERE datasource_id = #{datasourceId}
     </select>
 
     <insert id="save" parameterType="org.cboard.pojo.DashboardDatasource">
         <![CDATA[
-        INSERT INTO dashboard_datasource(user_id,source_name,source_type,config) VALUES (#{userId},#{name},#{type},#{config})
+        INSERT INTO dashboard_datasource(user_id,source_name,source_type,config) VALUES (#{userId},#{sourceName},#{sourceType},#{config})
         ]]>
     </insert>
 
     <update id="update" parameterType="org.cboard.pojo.DashboardDatasource">
         <![CDATA[
-        UPDATE dashboard_datasource SET source_name = #{name},config = #{config},update_time = #{updateTime} where datasource_id = #{id}
+        UPDATE dashboard_datasource SET source_name = #{sourceName},config = #{config},update_time = #{updateTime} where datasource_id = #{datasourceId}
         ]]>
     </update>
 
@@ -74,17 +60,17 @@
         SELECT count(1) from dashboard_datasource where 1=1
         <if test="datasource_id != null" >
         <![CDATA[
-            and datasource_id <> #{datasource_id}
+            and datasource_id <> #{datasourceId}
             ]]>
         </if>
-          and source_name = #{source_name}
+          and source_name = #{sourceName}
     </select>
 
     <delete id="delete">
-        DELETE FROM dashboard_datasource WHERE datasource_id = #{id}
+        DELETE FROM dashboard_datasource WHERE datasource_id = #{datasourceId}
     </delete>
 
     <select id="checkDatasourceRole" resultType="java.lang.Long">
-        SELECT count(1) FROM dashboard_datasource WHERE datasource_id = #{param1} and (#{userId} = '1' OR user_id = #{userId} OR datasource_id IN (SELECT res_id FROM dashboard_user_role ur LEFT JOIN dashboard_role_res rr ON ur.role_id = rr.role_id WHERE ur.user_id = #{userId} AND rr.res_type = 'datasource' AND rr.permission LIKE #{permissionPattern}))
+        SELECT count(1) FROM dashboard_datasource WHERE datasource_id = #{datasourceId} and (#{userId} = '1' OR user_id = #{userId})
     </select>
 </mapper>

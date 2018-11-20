@@ -3,6 +3,7 @@ package io.renren.modules.sys.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.renren.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @date 2016年9月18日 上午9:34:11
  */
 @Mapper
+@Repository
 public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	
 	/**
@@ -31,5 +33,14 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 * 根据用户名，查询系统用户
 	 */
 	SysUserEntity queryByUserName(String username);
+
+	/**
+	 * @Author: zhangjianping
+	 * @Date: 2018-11-13
+	 * @Param: [sysUserEntity]
+	 * @Return: io.renren.modules.sys.entity.SysUserEntity
+	 * @Description: 根据 entity 条件，查询一条记录
+	 */
+	//SysUserEntity selectOne(SysUserEntity sysUserEntity);
 
 }

@@ -82,6 +82,11 @@ public class KylinDataProvider extends DataProvider implements Aggregatable, Ini
     }
 
     @Override
+    public String[][] getDatasetData(Integer page, Integer limit) throws Exception {
+        return null;
+    }
+
+    @Override
     public void test() throws Exception {
         LOG.debug("Execute Kylin DataProvider.test() Start!");
         List<String[]> list = null;

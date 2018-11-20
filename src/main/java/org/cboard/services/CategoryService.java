@@ -19,7 +19,7 @@ public class CategoryService {
     @Autowired
     private CategoryDao categoryDao;
 
-    public ServiceStatus save(String userId, String json) {
+    public ServiceStatus save(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardCategory category = new DashboardCategory();
         category.setUserId(userId);
@@ -35,7 +35,7 @@ public class CategoryService {
         }
     }
 
-    public ServiceStatus update(String userId, String json) {
+    public ServiceStatus update(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardCategory category = new DashboardCategory();
         category.setUserId(userId);

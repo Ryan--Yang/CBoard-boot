@@ -33,7 +33,7 @@ public class BaseController {
         //User user = authenticationService.getCurrentUser();
         //FIXME 获取当前已登录用户信息
         User user = new User();
-        user.setUserId("1");
+        user.setUserId((long) 1);
         user.setName("admin");
         tlUser.set(user);
         String log = new CBoardActionLog(user, url).toString();

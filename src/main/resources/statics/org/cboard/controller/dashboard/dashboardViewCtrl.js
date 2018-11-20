@@ -80,7 +80,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
         }
     };
 
-    $http.post("admin/isConfig", {type: 'widget'}).success(function (response) {
+    $http.post("dashboard/isConfig", {type: 'widget'}).success(function (response) {
         $scope.widgetCfg = response;
     });
 

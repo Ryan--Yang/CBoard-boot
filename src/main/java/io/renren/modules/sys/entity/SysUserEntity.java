@@ -3,6 +3,7 @@ package io.renren.modules.sys.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import io.renren.common.validator.group.AddGroup;
 import io.renren.common.validator.group.UpdateGroup;
 
@@ -20,7 +21,7 @@ import java.util.List;
  * @date 2016年9月18日 上午9:28:55
  */
 @TableName("sys_user")
-public class SysUserEntity implements Serializable {
+public class SysUserEntity extends Wrapper<SysUserEntity> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -213,5 +214,15 @@ public class SysUserEntity implements Serializable {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+
+	@Override
+	public SysUserEntity getEntity() {
+		return null;
+	}
+
+	@Override
+	public String getSqlSegment() {
+		return null;
 	}
 }

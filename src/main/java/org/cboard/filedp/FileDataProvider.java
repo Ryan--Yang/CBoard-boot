@@ -88,6 +88,11 @@ public class FileDataProvider extends DataProvider {
     }
 
     @Override
+    public String[][] getDatasetData(Integer page, Integer limit) throws Exception {
+        return null;
+    }
+
+    @Override
     public String[][] getData() throws Exception {
         Stopwatch stopwatch = Stopwatch.createStarted();
         String basePath = dataSource.get(DS_PARAM_BASE_PATH);

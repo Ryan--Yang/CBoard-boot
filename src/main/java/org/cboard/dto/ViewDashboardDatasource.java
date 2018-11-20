@@ -14,7 +14,7 @@ import java.util.Map;
 public class ViewDashboardDatasource {
 
     private Long id;
-    private String userId;
+    private Long userId;
     private String name;
     private String type;
     private Map<String, Object> config;
@@ -34,10 +34,10 @@ public class ViewDashboardDatasource {
     };
 
     public ViewDashboardDatasource(DashboardDatasource datasource) {
-        this.id = datasource.getId();
+        this.id = datasource.getDatasourceId();
         this.userId = datasource.getUserId();
-        this.name = datasource.getName();
-        this.type = datasource.getType();
+        this.name = datasource.getSourceName();
+        this.type = datasource.getSourceType();
         this.config = JSONObject.parseObject(datasource.getConfig());
         this.edit = RolePermission.isEdit(datasource.getPermission());
         this.delete = RolePermission.isDelete(datasource.getPermission());
@@ -71,11 +71,11 @@ public class ViewDashboardDatasource {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

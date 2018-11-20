@@ -8,7 +8,9 @@ import com.google.common.collect.Maps;
 import com.google.common.hash.Hashing;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.cboard.dao.*;
+import org.cboard.dataprovider.DataProvider;
 import org.cboard.dataprovider.DataProviderManager;
 import org.cboard.dataprovider.DataProviderViewManager;
 import org.cboard.dataprovider.config.AggConfig;
@@ -19,6 +21,7 @@ import org.cboard.services.*;
 import org.cboard.services.job.JobService;
 import org.cboard.services.persist.excel.XlsProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -86,6 +89,15 @@ public class DashboardController extends BaseController {
     @Autowired
     private XlsProcessService xlsProcessService;
 
+    @Value("${admin_user_id}")
+    private String adminUserId;
+
+    @Autowired
+    private MenuDao menuDao;
+
+    @Autowired
+    private MenuService menuService;
+
 
     @RequestMapping(value = "/test")
     public ServiceStatus test(@RequestParam(name = "datasource", required = false) String datasource, @RequestParam(name = "query", required = false) String query) {
@@ -134,13 +146,6 @@ public class DashboardController extends BaseController {
     @RequestMapping(value = "/getDatasourceView")
     @ResponseBody
     public String getDatasourceView(@RequestParam(name = "type") String type) {
-        /*String tmp = DataProviderViewManager.getDatasourceView(type);
-        System.out.println("data provider: " + tmp);
-        return "<div class=\"form-group\">" +
-                "    <label>{{'DATAPROVIDER.JDBC.JDBCURL'|translate}} *</label>" +
-                "            <input ng-model=\"curDatasource.config.jdbcurl\" class=\"form-control input-sm\" placeholder=\"\" />" +
-                "    </div>";*/
-        //System.out.println("origin: " + DataProviderViewManager.getDatasourceView(type));
         return DataProviderViewManager.getDatasourceView(type);
     }
 
@@ -240,30 +245,35 @@ public class DashboardController extends BaseController {
     }
 
     @RequestMapping(value = "/saveNewDataset")
+    @RequiresPermissions("sys:dataset:save")
     public ServiceStatus saveNewDataset(@RequestParam(name = "json") String json) {
         return datasetService.save(tlUser.get().getUserId(), json);
     }
 
     @RequestMapping(value = "/getAllDatasetList")
+    @RequiresPermissions("sys:dataset:list")
     public List<ViewDashboardDataset> getAllDatasetList() {
         List<DashboardDataset> list = datasetDao.getAllDatasetList();
         return Lists.transform(list, ViewDashboardDataset.TO);
     }
 
     @RequestMapping(value = "/getDatasetList")
+    @RequiresPermissions("sys:dataset:list")
     public List<ViewDashboardDataset> getDatasetList() {
         List<DashboardDataset> list = datasetDao.getDatasetList(tlUser.get().getUserId());
         return Lists.transform(list, ViewDashboardDataset.TO);
     }
 
     @RequestMapping(value = "/updateDataset")
+    @RequiresPermissions("sys:dataset:update")
     public ServiceStatus updateDataset(@RequestParam(name = "json") String json) {
         return datasetService.update(tlUser.get().getUserId(), json);
     }
 
     @RequestMapping(value = "/deleteDataset")
-    public ServiceStatus deleteDataset(@RequestParam(name = "id") Long id) {
-        return datasetService.delete(tlUser.get().getUserId(), id);
+    @RequiresPermissions("sys:dataset:delete")
+    public ServiceStatus deleteDataset(@RequestParam(name = "id") Long datasetId) {
+        return datasetService.delete(tlUser.get().getUserId(), datasetId);
     }
 
     @RequestMapping(value = "/getDatasetCategoryList")
@@ -473,5 +483,28 @@ public class DashboardController extends BaseController {
             file.mkdirs();
         }
         return templateDir;
+    }
+
+    @RequestMapping(value = "/isConfig")
+    public boolean isConfig(@RequestParam(name = "type") String type) {
+        if (tlUser.get().getUserId().equals(adminUserId)) {
+            return true;
+        } else if (type.equals("widget")) {
+            List<Long> menuIdList = menuDao.getMenuIdByUserRole(tlUser.get().getUserId());
+            if (menuIdList.contains(1L) && menuIdList.contains(4L)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @RequestMapping(value = "/getMenuList")
+    public List<DashboardMenu> getMenuList() {
+        if (adminUserId.equals(tlUser.get().getUserId())) {
+            return menuService.getMenuList();
+        } else {
+            List<Long> menuId = menuDao.getMenuIdByRoleAdmin(tlUser.get().getUserId());
+            return menuService.getMenuList().stream().filter(e -> menuId.stream().anyMatch(id -> id.equals(e.getMenuId()))).collect(Collectors.toList());
+        }
     }
 }

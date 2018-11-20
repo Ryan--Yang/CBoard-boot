@@ -52,17 +52,17 @@ public class DatasourceService {
         return vlist;
     }
 
-    public ServiceStatus save(String userId, String json) {
+    public ServiceStatus save(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardDatasource datasource = new DashboardDatasource();
         datasource.setUserId(userId);
-        datasource.setName(jsonObject.getString("name"));
-        datasource.setType(jsonObject.getString("type"));
+        datasource.setSourceName(jsonObject.getString("name"));
+        datasource.setSourceType(jsonObject.getString("type"));
         datasource.setConfig(jsonObject.getString("config"));
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("user_id", datasource.getUserId());
-        paramMap.put("source_name", datasource.getName());
+        paramMap.put("source_name", datasource.getSourceName());
         if (datasourceDao.countExistDatasourceName(paramMap) <= 0) {
             datasourceDao.save(datasource);
             return new ServiceStatus(ServiceStatus.Status.Success, "success");
@@ -71,20 +71,20 @@ public class DatasourceService {
         }
     }
 
-    public ServiceStatus update(String userId, String json) {
+    public ServiceStatus update(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardDatasource datasource = new DashboardDatasource();
         datasource.setUserId(userId);
-        datasource.setName(jsonObject.getString("name"));
-        datasource.setType(jsonObject.getString("type"));
+        datasource.setSourceName(jsonObject.getString("name"));
+        datasource.setSourceType(jsonObject.getString("type"));
         datasource.setConfig(jsonObject.getString("config"));
-        datasource.setId(jsonObject.getLong("id"));
+        datasource.setDatasourceId(jsonObject.getLong("id"));
         datasource.setUpdateTime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("datasource_id", datasource.getId());
+        paramMap.put("datasource_id", datasource.getDatasourceId());
         paramMap.put("user_id", datasource.getUserId());
-        paramMap.put("source_name", datasource.getName());
+        paramMap.put("source_name", datasource.getSourceName());
         if (datasourceDao.countExistDatasourceName(paramMap) <= 0) {
             datasourceDao.update(datasource);
             return new ServiceStatus(ServiceStatus.Status.Success, "success");
@@ -93,17 +93,17 @@ public class DatasourceService {
         }
     }
 
-    public ServiceStatus delete(String userId, Long id) {
+    public ServiceStatus delete(Long userId, Long id) {
         datasourceDao.delete(id, userId);
         return new ServiceStatus(ServiceStatus.Status.Success, "success");
     }
 
-    public ServiceStatus checkDatasource(String userId, Long id) {
+    public ServiceStatus checkDatasource(Long userId, Long id) {
         DashboardDatasource datasource = datasourceDao.getDatasource(id);
-        if (datasourceDao.checkDatasourceRole(userId, id, RolePermission.PATTERN_READ) == 1) {
+        if (datasourceDao.checkDatasourceRole(userId, id) == 1) {
             return new ServiceStatus(ServiceStatus.Status.Success, "success");
         } else {
-            return new ServiceStatus(ServiceStatus.Status.Fail, datasource.getName());
+            return new ServiceStatus(ServiceStatus.Status.Fail, datasource.getSourceName());
         }
     }
 }

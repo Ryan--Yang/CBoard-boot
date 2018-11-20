@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface MenuDao {
-    List<Long> getMenuIdByUserRole(String userId);
+    List<Long> getMenuIdByUserRole(Long userId);
 
-    List<Long> getMenuIdByRoleAdmin(String userId);
+    List<Long> getMenuIdByRoleAdmin(Long userId);
 }

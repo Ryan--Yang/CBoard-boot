@@ -1,26 +1,44 @@
+/**
+ * Copyright 2018 人人开源 http://www.renren.io
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package io.renren.modules.sys.controller;
 
+
+import com.google.code.kaptcha.Constants;
+import com.google.code.kaptcha.Producer;
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hashing;
 import io.renren.common.utils.R;
-import io.renren.modules.sys.entity.SysUserEntity;
-import io.renren.modules.sys.form.SysLoginForm;
-import io.renren.modules.sys.service.SysCaptchaService;
 import io.renren.modules.sys.service.SysUserService;
-import io.renren.modules.sys.service.SysUserTokenService;
-import org.apache.commons.io.IOUtils;
-import org.apache.shiro.crypto.hash.Sha256Hash;
+import io.renren.modules.sys.shiro.ShiroUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.subject.Subject;
+import org.cboard.services.ServiceStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * 登录相关
@@ -29,67 +47,66 @@ import java.util.Map;
  * @email sunlightcs@gmail.com
  * @date 2016年11月10日 下午1:15:31
  */
-@RestController
-public class SysLoginController extends AbstractController {
+@Controller
+@RequestMapping("/sys")
+public class SysLoginController {
 	@Autowired
-	private SysUserService sysUserService;
+	private Producer producer;
+
 	@Autowired
-	private SysUserTokenService sysUserTokenService;
-	@Autowired
-	private SysCaptchaService sysCaptchaService;
+	SysUserService sysUserService;
+	
+	@RequestMapping("captcha.jpg")
+	public void captcha(HttpServletResponse response)throws IOException {
+        response.setHeader("Cache-Control", "no-store, no-cache");
+        response.setContentType("image/jpeg");
 
-	/**
-	 * 验证码
-	 */
-	@GetMapping("captcha.jpg")
-	public void captcha(HttpServletResponse response, String uuid)throws ServletException, IOException {
-		response.setHeader("Cache-Control", "no-store, no-cache");
-		response.setContentType("image/jpeg");
-
-		//获取图片验证码
-		BufferedImage image = sysCaptchaService.getCaptcha(uuid);
-
-		ServletOutputStream out = response.getOutputStream();
-		ImageIO.write(image, "jpg", out);
-		IOUtils.closeQuietly(out);
+        //生成文字验证码
+        String text = producer.createText();
+        //生成图片验证码
+        BufferedImage image = producer.createImage(text);
+        //保存到shiro session
+        ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
+        
+        ServletOutputStream out = response.getOutputStream();
+        ImageIO.write(image, "jpg", out);
 	}
-
+	
 	/**
 	 * 登录
 	 */
-	@PostMapping("/sys/login")
-	public Map<String, Object> login(@RequestBody SysLoginForm form)throws IOException {
-		boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
-		if(!captcha){
+	@ResponseBody
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public R login(String username, String password, String captcha) {
+		/*String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+		if(!captcha.equalsIgnoreCase(kaptcha)){
 			return R.error("验证码不正确");
-		}
-
-		//用户信息
-		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
-
-		//账号不存在、密码错误
-		if(user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
+		}*/
+		
+		try{
+			Subject subject = ShiroUtils.getSubject();
+			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+			subject.login(token);
+		}catch (UnknownAccountException e) {
+			return R.error(e.getMessage());
+		}catch (IncorrectCredentialsException e) {
 			return R.error("账号或密码不正确");
-		}
-
-		//账号锁定
-		if(user.getStatus() == 0){
+		}catch (LockedAccountException e) {
 			return R.error("账号已被锁定,请联系管理员");
+		}catch (AuthenticationException e) {
+			return R.error("账户验证失败");
 		}
-
-		//生成token，并保存到数据库
-		R r = sysUserTokenService.createToken(user.getUserId());
-		return r;
+	    
+		return R.ok();
 	}
-
-
+	
 	/**
 	 * 退出
 	 */
-	@PostMapping("/sys/logout")
-	public R logout() {
-		sysUserTokenService.logout(getUserId());
-		return R.ok();
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout() {
+		ShiroUtils.logout();
+		return "redirect:login.html";
 	}
 	
 }

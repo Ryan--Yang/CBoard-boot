@@ -4,70 +4,58 @@
 
     <select id="getBoard" resultType="org.cboard.pojo.DashboardBoard">
         SELECT
-          board_id    AS id,
+          board_id    AS boardId,
           b.user_id   AS userId,
-          board_name  AS name,
-          layout_json AS layout,
+          board_name  AS boardName,
+          layout_json AS layoutJson,
           category_id AS categoryId,
-          u.user_name AS userName,
-          create_time AS createTime,
-          update_time AS updateTime
+          u.username AS userName,
+          b.create_time AS createTime,
+          b.update_time AS updateTime
         FROM dashboard_board b
-        LEFT JOIN dashboard_user u ON u.user_id = b.user_id
-        WHERE board_id = #{id}
+        LEFT JOIN sys_user u ON u.user_id = b.user_id
+        WHERE board_id = #{boardId}
     </select>
 
     <select id="getBoardList" resultType="org.cboard.pojo.DashboardBoard">
           SELECT
-               board_id        AS id,
+               board_id        AS boardId,
                a.user_id       AS userId,
-               board_name      AS NAME,
-               layout_json     AS layout,
+               board_name      AS boardName,
+               layout_json     AS layoutJson,
                a.category_id   AS categoryId,
                b.category_name AS categoryName,
-               u.user_name     AS userName,
-               u.login_name    AS loginName,
-               create_time     AS createTime,
-               update_time     AS updateTime
+               u.username     AS userName,
+               a.create_time     AS createTime,
+               a.update_time     AS updateTime
           FROM dashboard_board a
-          LEFT JOIN dashboard_user u ON u.user_id = a.user_id
+          LEFT JOIN sys_user u ON u.user_id = a.user_id
           LEFT JOIN dashboard_category b ON a.category_id = b.category_id
-         WHERE #{userId} = '1' OR a.user_id = #{userId} OR a.board_id IN (
-             SELECT res_id
-               FROM dashboard_user_role ur
-               LEFT JOIN dashboard_role_res rr ON ur.role_id = rr.role_id
-              WHERE ur.user_id = #{userId} AND rr.res_type = 'board'
-          ) ORDER BY a.board_name
+         WHERE #{userId} = '1' OR a.user_id = #{userId}
+         ORDER BY a.board_name
     </select>
 
     <select id="getBoardListAdmin" resultType="org.cboard.pojo.DashboardBoard">
         SELECT
-               board_id        AS id,
+               board_id        AS boardId,
                a.user_id       AS userId,
-               board_name      AS NAME,
-               layout_json     AS layout,
+               board_name      AS boardName,
+               layout_json     AS layoutJson,
                a.category_id   AS categoryId,
                b.category_name AS categoryName,
-               u.user_name     AS userName,
-               u.login_name    AS loginName,
-               create_time     AS createTime,
-               update_time     AS updateTime
+               u.username     AS userName,
+               a.create_time     AS createTime,
+               a.update_time     AS updateTime
           FROM dashboard_board a
-          LEFT JOIN dashboard_user u ON u.user_id = a.user_id
+          LEFT JOIN sys_user u ON u.user_id = a.user_id
           LEFT JOIN dashboard_category b ON a.category_id = b.category_id
          WHERE #{userId} = '1' OR a.user_id = #{userId}
-            OR a.board_id IN (
-                SELECT res_id
-                FROM dashboard_role r
-                LEFT JOIN dashboard_role_res rr ON r.role_id = rr.role_id
-                WHERE r.user_id = #{userId} AND rr.res_type = 'board'
-            )
         ORDER BY a.board_name
     </select>
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="board_id" parameterType="org.cboard.pojo.DashboardBoard">
         INSERT INTO dashboard_board(user_id,board_name,layout_json,category_id)
-        VALUES (#{userId},#{name},#{layout},
+        VALUES (#{userId},#{boardName},#{layoutJson},
         <choose>
             <when test="categoryId == null">
                 null
@@ -81,7 +69,7 @@
 
     <update id="update" parameterType="org.cboard.pojo.DashboardBoard">
         UPDATE dashboard_board
-        SET board_name = #{name},layout_json = #{layout},update_time = #{updateTime},
+        SET board_name = #{boardName},layout_json = #{layoutJson},update_time = #{updateTime},
         <choose>
             <when test="categoryId == null">
                 category_id = null
@@ -90,35 +78,28 @@
                 category_id = #{categoryId}
             </otherwise>
         </choose>
-        WHERE board_id = #{id}
+        WHERE board_id = #{boardId}
     </update>
 
     <select id="countExistBoardName" parameterType="Map" resultType="java.lang.Long">
         SELECT count(1) FROM dashboard_board WHERE user_id = #{user_id}
         <if test="board_id != null" >
             <![CDATA[
-            AND board_id <> #{board_id}
+            AND board_id <> #{boardId}
             ]]>
         </if>
-        AND board_name = #{board_name}
+        AND board_name = #{boardName}
     </select>
 
     <delete id="delete">
-        DELETE FROM dashboard_board WHERE board_id = #{id}
+        DELETE FROM dashboard_board WHERE board_id = #{boardId}
     </delete>
 
     <select id="checkBoardRole" resultType="java.lang.Long">
         SELECT count(1)
           FROM dashboard_board
          WHERE board_id = #{boardId}
-               AND (#{userId} = '1'
-                 OR user_id = #{userId}
-                 OR board_id IN (
-                    SELECT res_id
-                      FROM dashboard_user_role ur
-                      LEFT JOIN dashboard_role_res rr ON ur.role_id = rr.role_id
-                     WHERE ur.user_id = #{userId} AND rr.res_type = 'board' AND rr.permission LIKE #{permissionPattern})
-                 )
+               AND (#{userId} = '1' OR user_id = #{userId})
     </select>
 
     <select id="getBoardParam" resultType="org.cboard.pojo.DashboardBoardParam">

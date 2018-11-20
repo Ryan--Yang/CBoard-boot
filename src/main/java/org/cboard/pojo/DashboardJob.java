@@ -7,14 +7,14 @@ import java.util.Date;
  */
 public class DashboardJob {
 
-    private Long id;
-    private String name;
+    private Long jobId;
+    private String jobName;
     private String cronExp;
     private Date startDate;
     private Date endDate;
     private String jobType;
-    private String config;
-    private String userId;
+    private String jobConfig;
+    private Long userId;
     private String userName;
     private Date lastExecTime;
     private Long jobStatus;
@@ -53,28 +53,28 @@ public class DashboardJob {
         this.lastExecTime = lastExecTime;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getJobId() {
+        return jobId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
     }
 
-    public String getName() {
-        return name;
+    public String getJobName() {
+        return jobName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
     }
 
     public String getCronExp() {
@@ -109,12 +109,12 @@ public class DashboardJob {
         this.jobType = jobType;
     }
 
-    public String getConfig() {
-        return config;
+    public String getJobConfig() {
+        return jobConfig;
     }
 
-    public void setConfig(String config) {
-        this.config = config;
+    public void setJobConfig(String jobConfig) {
+        this.jobConfig = jobConfig;
     }
 
     public String getUserName() {

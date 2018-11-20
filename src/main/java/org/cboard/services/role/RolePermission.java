@@ -12,7 +12,7 @@ public class RolePermission {
     public static final String PATTERN_READ = "%";
 
     public static boolean isEdit(String permission) {
-        return get(permission, 0);
+        return get(permission, 1);
     }
 
     public static boolean isDelete(String permission) {

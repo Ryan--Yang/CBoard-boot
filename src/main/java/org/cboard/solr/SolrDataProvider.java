@@ -229,6 +229,11 @@ public class SolrDataProvider extends DataProvider implements Aggregatable, Init
     }
 
     @Override
+    public String[][] getDatasetData(Integer page, Integer limit) throws Exception {
+        return null;
+    }
+
+    @Override
     public void test() throws Exception {
         getSolrData();
     }

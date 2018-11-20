@@ -47,7 +47,7 @@ public class DataProviderService {
         DashboardDatasource datasource = datasourceDao.getDatasource(datasourceId);
         JSONObject datasourceConfig = JSONObject.parseObject(datasource.getConfig());
         Map<String, String> dataSource = Maps.transformValues(datasourceConfig, Functions.toStringFunction());
-        DataProvider dataProvider = DataProviderManager.getDataProvider(datasource.getType(), dataSource, query);
+        DataProvider dataProvider = DataProviderManager.getDataProvider(datasource.getSourceType(), dataSource, query);
         if (dataset != null && dataset.getInterval() != null && dataset.getInterval() > 0) {
             dataProvider.setInterval(dataset.getInterval());
         }
@@ -58,6 +58,18 @@ public class DataProviderService {
         DashboardDatasource datasource = datasourceDao.getDatasource(datasourceId);
         JSONObject datasourceConfig = JSONObject.parseObject(datasource.getConfig());
         return Maps.transformValues(datasourceConfig, Functions.toStringFunction());
+    }
+
+    public String[][] getDatasetData(Long datasourceId, Map<String, String> query, Long datasetId){
+        try {
+            Dataset dataset = getDataset(datasetId);
+            DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
+            return dataProvider.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOG.error("", e);
+            throw new CBoardException(e.getMessage());
+        }
     }
 
     public AggregateResult queryAggData(Long datasourceId, Map<String, String> query, Long datasetId, AggConfig config, boolean reload) {
@@ -168,7 +180,7 @@ public class DataProviderService {
         private JSONObject schema;
 
         public Dataset(DashboardDataset dataset) {
-            JSONObject data = JSONObject.parseObject(dataset.getData());
+            JSONObject data = JSONObject.parseObject(dataset.getDataJson());
             this.query = Maps.transformValues(data.getJSONObject("query"), Functions.toStringFunction());
             this.datasourceId = data.getLong("datasource");
             this.interval = data.getLong("interval");

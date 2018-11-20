@@ -62,7 +62,7 @@ cBoard.controller('cBoardCtrl', function ($rootScope, $scope, $location, $http, 
                     $uibModalInstance.close();
                 };
                 $scope.ok = function () {
-                    $http.post("commons/changePwd", {
+                    $http.post("sys/user/password", {
                         curPwd: $scope.curPwd,
                         newPwd: $scope.newPwd,
                         cfmPwd: $scope.cfmPwd

@@ -19,10 +19,12 @@ import java.util.List;
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if(!registry.hasMappingForPattern("/statics/**")){
+        /*if(!registry.hasMappingForPattern("/statics/**")){
             registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
         }
-        super.addResourceHandlers(registry);
+        super.addResourceHandlers(registry);*/
+
+        registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
     }
 
     @Override

@@ -32,18 +32,18 @@ public class WidgetService {
     @Autowired
     private DatasourceDao datasourceDao;
 
-    public ServiceStatus save(String userId, String json) {
+    public ServiceStatus save(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardWidget widget = new DashboardWidget();
         widget.setUserId(userId);
-        widget.setName(jsonObject.getString("name"));
-        widget.setData(jsonObject.getString("data"));
+        widget.setWidgetName(jsonObject.getString("name"));
+        widget.setDataJson(jsonObject.getString("data"));
         widget.setCategoryName(jsonObject.getString("categoryName"));
         if (StringUtils.isEmpty(widget.getCategoryName())) {
             widget.setCategoryName("默认分类");
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("widget_name", widget.getName());
+        paramMap.put("widget_name", widget.getWidgetName());
         paramMap.put("user_id", widget.getUserId());
         paramMap.put("category_name", widget.getCategoryName());
 
@@ -55,22 +55,22 @@ public class WidgetService {
         }
     }
 
-    public ServiceStatus update(String userId, String json) {
+    public ServiceStatus update(Long userId, String json) {
         JSONObject jsonObject = JSONObject.parseObject(json);
         DashboardWidget widget = new DashboardWidget();
         widget.setUserId(userId);
-        widget.setId(jsonObject.getLong("id"));
-        widget.setName(jsonObject.getString("name"));
+        widget.setWidgetId(jsonObject.getLong("id"));
+        widget.setWidgetName(jsonObject.getString("name"));
         widget.setCategoryName(jsonObject.getString("categoryName"));
-        widget.setData(jsonObject.getString("data"));
+        widget.setDataJson(jsonObject.getString("data"));
         widget.setUpdateTime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         if (StringUtils.isEmpty(widget.getCategoryName())) {
             widget.setCategoryName("默认分类");
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("widget_name", widget.getName());
+        paramMap.put("widget_name", widget.getWidgetName());
         paramMap.put("user_id", widget.getUserId());
-        paramMap.put("widget_id", widget.getId());
+        paramMap.put("widget_id", widget.getWidgetId());
         paramMap.put("category_name", widget.getCategoryName());
         if (widgetDao.countExistWidgetName(paramMap) <= 0) {
             widgetDao.update(widget);
@@ -80,31 +80,31 @@ public class WidgetService {
         }
     }
 
-    public ServiceStatus delete(String userId, Long id) {
+    public ServiceStatus delete(Long userId, Long id) {
         widgetDao.delete(id, userId);
         return new ServiceStatus(ServiceStatus.Status.Success, "success");
     }
 
-    public ServiceStatus checkRule(String userId, Long widgetId) {
+    public ServiceStatus checkRule(Long userId, Long widgetId) {
         DashboardWidget widget = widgetDao.getWidget(widgetId);
         if (widget == null) {
             return null;
         }
-        JSONObject object = (JSONObject) JSONObject.parse(widget.getData());
+        JSONObject object = (JSONObject) JSONObject.parse(widget.getDataJson());
         Long datasetId = object.getLong("datasetId");
         if (datasetId != null) {
-            if (datasetDao.checkDatasetRole(userId, datasetId, RolePermission.PATTERN_READ) == 1) {
+            if (datasetDao.checkDatasetRole(userId, datasetId) == 1) {
                 return new ServiceStatus(ServiceStatus.Status.Success, "success");
             } else {
                 DashboardDataset ds = datasetDao.getDataset(datasetId);
-                return new ServiceStatus(ServiceStatus.Status.Fail, ds.getCategoryName() + "/" + ds.getName());
+                return new ServiceStatus(ServiceStatus.Status.Fail, ds.getCategoryName() + "/" + ds.getDatasetName());
             }
         } else {
             Long datasourceId = object.getLong("datasource");
-            if (datasourceDao.checkDatasourceRole(userId, datasourceId, RolePermission.PATTERN_READ) == 1) {
+            if (datasourceDao.checkDatasourceRole(userId, datasourceId) == 1) {
                 return new ServiceStatus(ServiceStatus.Status.Success, "success");
             } else {
-                return new ServiceStatus(ServiceStatus.Status.Fail, datasourceDao.getDatasource(datasourceId).getName());
+                return new ServiceStatus(ServiceStatus.Status.Fail, datasourceDao.getDatasource(datasourceId).getSourceName());
             }
         }
     }

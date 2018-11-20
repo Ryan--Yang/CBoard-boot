@@ -11,6 +11,6 @@
 	</delete>
 
 	<select id="queryRoleIdList" resultType="long">
-		select role_id from sys_user_role where user_id = #{value}
+		select role_id from sys_user_role where user_id = #{userId}
 	</select>
 </mapper>
