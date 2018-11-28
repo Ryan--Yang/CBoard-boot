@@ -15,7 +15,7 @@ import java.util.Map;
 @Repository
 public interface DatasourceDao {
 
-    String getDatasourceConfig(Long userId, Long datasourceId);
+    String getDatasourceConfig(@Param("userId") Long userId,@Param("datasourceId") Long datasourceId);
 
     List<DashboardDatasource> getDatasourceList(Long userId);
 
@@ -29,7 +29,7 @@ public interface DatasourceDao {
 
     int update(DashboardDatasource dashboardDatasource);
 
-    int delete(Long datasourceId, Long userId);
+    int delete(@Param("datasourceId") Long datasourceId,@Param("userId") Long userId);
 
-    long checkDatasourceRole(Long userId, Long datasourceId);
+    long checkDatasourceRole(@Param("userId") Long userId, @Param("datasourceId") Long datasourceId);
 }

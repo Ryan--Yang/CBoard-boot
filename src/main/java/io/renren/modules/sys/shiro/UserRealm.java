@@ -79,7 +79,7 @@ public class UserRealm extends AuthorizingRealm {
 		SysUserEntity user = (SysUserEntity)principals.getPrimaryPrincipal();
 		Long userId = user.getUserId();
 
-        System.out.println("******************************* origin: " + redisTemplate.opsForValue().get(RedisKeys.getAuthoritySessionKey(userId)));
+       // System.out.println("******************************* origin: " + redisTemplate.opsForValue().get(RedisKeys.getAuthoritySessionKey(userId)));
 		String perms1 = (String) redisTemplate.opsForValue().get(RedisKeys.getAuthoritySessionKey(userId));
         //List<String> permsList = (List<String>) redisTemplate.opsForValue().get(RedisKeys.getAuthoritySessionKey(userId));
 
@@ -96,7 +96,7 @@ public class UserRealm extends AuthorizingRealm {
 
 		String perms = perms1.substring(1, perms1.length()-1);
         List<String> permsList = Arrays.asList(perms.split(","));
-        System.out.println("*********************** permList size: " + permsList.size());
+       // System.out.println("*********************** permList size: " + permsList.size());
 
 		//用户权限列表
 		Set<String> permsSet = new HashSet<>();
@@ -106,8 +106,8 @@ public class UserRealm extends AuthorizingRealm {
 			}
 			permsSet.addAll(Arrays.asList(perm.trim().split(",")));
 		}
-        System.out.println("************************* permsSet size: " + permsSet.size());
-        System.out.println("************************* permsSet: " + permsSet);
+        //System.out.println("************************* permsSet size: " + permsSet.size());
+        //System.out.println("************************* permsSet: " + permsSet);
 
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		info.setStringPermissions(permsSet);

@@ -28,11 +28,11 @@ public interface CBoardDao {
 
     int delete(Long boardId, Long userId);
 
-    DashboardBoard getBoard(Long boardId);
+    DashboardBoard getBoard(@Param("boardId") Long boardId);
 
     long checkBoardRole(Long userId, Long boardId, String permissionPattern);
 
-    DashboardBoardParam getBoardParam(Long boardId, Long userId);
+    DashboardBoardParam getBoardParam(@Param("boardId") Long boardId,@Param("userId") Long userId);
 
     int saveBoardParam(DashboardBoardParam boardParam);
 

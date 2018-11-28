@@ -45,8 +45,8 @@ public class PersistService {
             TASK_MAP.put(persistId, context);
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
             String phantomUrl = new StringBuffer()
-                    .append("://127.0.0.1:")
-                    .append("/render.html")
+                    .append("http://127.0.0.1:8080")
+                    .append("/cetc/render.html")
                     .append("?sid=").append(uuid)
                     .append("#?id=").append(dashboardId)
                     .append("&pid=").append(persistId)
